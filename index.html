@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestão Financeira Pessoal</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .card {
+      margin-top: 20px;
+      box-shadow: 0 0 15px;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .receitas {
+      color: #28a745;
+      box-shadow: 0 0 15px;
+    }
+
+    .despesas {
+      color: #fff;
+     font-weight:bold 
+      
+    }
+
+    .dividas {
+      color: #fff ;
+      background-color:red ;
+      
+    }
+
+    .saldo {
+      font-weight: bold;
+    }
+
+    h1 {
+      display: inline-block;
+      box-shadow: 0 0 15px;
+      background-color: aqua;
+      padding: 10px 20px; 
+    }
+    p{
+      background-color:#4CAF50 ;
+      color:#fff ;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center mt-4 mb-5">Gestão Financeira Pessoal</h1>
+
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title text-center">Receitas</h5>
+            <form>
+              <div class="form-group">
+                <label for="tipo-receita">Tipo de Receita:</label>
+                <select id="tipo-receita" class="form-control">
+                  <option value="">Selecione...</option>
+                  <option value="salario">Salário</option>
+                  <option value="renda-extra">Renda Extra</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="valor-receita">Valor (MT):</label>
+                <input type="number" id="valor-receita" class="form-control">
+              </div>
+              <button type="button" class="btn btn-success btn-block" onclick="adicionarReceita()">Adicionar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title text-center">Despesas</h5>
+            <form>
+              <div class="form-group">
+                <label for="descricao-despesa">Descrição:</label>
+                <input type="text" id="descricao-despesa" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="valor-despesa">Valor (MT):</label>
+                <input type="number" id="valor-despesa" class="form-control">
+              </div>
+              <button type="button" class="btn btn-danger btn-block" onclick="adicionarDespesa()">Adicionar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title text-center">Dívidas</h5>
+            <form>
+              <div class="form-group">
+                <label for="tipo-divida">Tipo de Dívida:</label>
+                <select id="tipo-divida" class="form-control" onchange="mostrarOpcoesDivida()">
+                  <option value="">Selecione...</option>
+                  <option value="normal">Dívida Normal</option>
+                  <option value="emprestimo">Dívida por Empréstimo</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="nome-divida">Nome da Dívida:</label>
+                <input type="text" id="nome-divida" class="form-control">
+              </div>
+              <div class="form-group" id="divida-emprestimo" style="display: none;">
+                <label for="percentual-divida">Percentual:</label>
+                <select id="percentual-divida" class="form-control">
+                  <option value="">Selecione...</option>
+                  <option value="0.2">20%</option>
+                  <option value="0.25">25%</option>
+                  <option value="0.3">30%</option>
+                  <option value="0.4">40%</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="valor-divida">Valor (MT):</label>
+                <input type="number" id="valor-divida" class="form-control">
+              </div>
+              <button type="button" class="btn btn-warning btn-block" onclick="adicionarDivida()">Adicionar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-center">Resumo</h5>
+        <p class="text-center receitas-title"><strong>Receitas:</strong></p>
+        <ul id="lista-receitas" class="list-group mb-3"></ul>
+        <p class="text-center despesas-title"><strong>Despesas:</strong></p>
+        <ul id="lista-despesas" class="list-group mb-3"></ul>
+        <p class="text-center dividas-title"><strong>Dívidas:</strong></p>
+        <ul id="lista-dividas" class="list-group mb-3"></ul>
+        <p class="text-center saldo">Saldo Disponível: <span id="saldo-disponivel" class="saldo">0.00</span> MT</p>
+        <p class="text-center dividas" id="total-dividas">Total de dívidas a pagar: 0.00 MT</p>
+        <p class="text-center despesas" id="total-despesas">Total de todas as despesas feitas: <strong>0.00 MT</strong></p>
+        <p id="aviso-dividas" class="text-danger text-center"></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script>
+    // Initialize Firebase
+ const firebaseConfig = {
+  apiKey: "AIzaSyD8XOHaLCzNLDrIlHG3em4g4gyYIKTLWpQ",
+  authDomain: "xitique-61310.firebaseapp.com",
+  databaseURL: "https://xitique-61310-default-rtdb.firebaseio.com",
+  projectId: "xitique-61310",
+  storageBucket: "xitique-61310.appspot.com",
+  messagingSenderId: "331274991404",
+  appId: "1:331274991404:web:2fec0eb082d3fe0b33de89",
+  measurementId: "G-DFDMBKW1RK"
+};
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    let receitas = [];
+    let despesas = [];
+    let dividas = [];
+    const rendaMensal = 10700; // Montante da renda mensal em MT
+
+    function adicionarReceita() {
+      const tipo = document.getElementById("tipo-receita").value;
+      const valor = parseFloat(document.getElementById("valor-receita").value);
+      const data = new Date().toLocaleString();
+      receitas.push({ tipo, valor, data });
+      atualizarResumo();
+      limparCampos();
+      salvarDados();
+    }
+
+    function adicionarDespesa() {
+      const descricao = document.getElementById("descricao-despesa").value;
+      const valor = parseFloat(document.getElementById("valor-despesa").value);
+      const data = new Date().toLocaleString();
+      despesas.push({ descricao, valor, data });
+      atualizarResumo();
+      limparCampos();
+      salvarDados();
+    }
+
+    function adicionarDivida() {
+      const valor = parseFloat(document.getElementById("valor-divida").value);
+      const tipo = document.getElementById("tipo-divida").value;
+      const nome = document.getElementById("nome-divida").value;
+      const data = new Date().toLocaleString();
+      if (tipo === "normal") {
+        dividas.push({ tipo, valor, nome, data });
+      } else {
+        const percentual = parseFloat(document.getElementById("percentual-divida").value);
+        const juros = valor * percentual;
+        dividas.push({ tipo, valor: valor + juros, valorReal: valor, juros, nome, data });
+      }
+      verificarDividas();
+      atualizarResumo();
+      limparCampos();
+      salvarDados();
+    }
+
+    function calcularTotalReceitas() {
+      return receitas.reduce((total, receita) => total + receita.valor, 0);
+    }
+
+    function calcularTotalDespesas() {
+      return despesas.reduce((total, despesa) => total + despesa.valor, 0);
+    }
+
+    function calcularTotalDividas() {
+      return dividas.reduce((total, divida) => total + divida.valor, 0);
+    }
+
+    function calcularTotalDividasReais() {
+      return dividas.reduce((total, divida) => total + divida.valorReal, 0);
+    }
+
+    function calcularSaldoDisponivel() {
+      const totalReceitas = calcularTotalReceitas();
+      const totalDespesas = calcularTotalDespesas();
+      return totalReceitas - totalDespesas;
+    }
+
+    function verificarDividas() {
+      const totalDividas = calcularTotalDividas();
+      const totalDividasReais = calcularTotalDividasReais();
+      const saldoDisponivel = calcularSaldoDisponivel();
+      const saldoDisponivelMes = saldoDisponivel + totalDividasReais;
+
+      const avisoDividas = document.getElementById("aviso-dividas");
+      avisoDividas.textContent = "";
+
+      if (saldoDisponivelMes < 0) {
+        avisoDividas.textContent = "Atenção! Suas dívidas estão ultrapassando sua renda mensal!";
+      }
+    }
+
+    function atualizarResumo() {
+      const totalReceitas = calcularTotalReceitas();
+      const totalDespesas = calcularTotalDespesas();
+      const totalDividas = calcularTotalDividas();
+      const totalDividasReais = calcularTotalDividasReais();
+      const saldoDisponivel = calcularSaldoDisponivel();
+
+      document.getElementById("saldo-disponivel").textContent = saldoDisponivel.toFixed(2);
+      document.getElementById("total-dividas").textContent = `Total de dívidas a pagar: ${totalDividas.toFixed(2)} MT`;
+      document.getElementById("total-despesas").textContent = `Total de todas as despesas feitas: ${totalDespesas.toFixed(2)} MT`;
+
+      const listaReceitas = document.getElementById("lista-receitas");
+      listaReceitas.innerHTML = "";
+      receitas.forEach((receita, index) => {
+        const item = document.createElement("li");
+        item.className = "list-group-item receitas";
+        item.innerHTML = `<strong>${receita.tipo}:</strong> ${receita.valor.toFixed(2)} MT - <span class="data">${receita.data}</span>`;
+        item.style.cursor = "pointer";
+        item.addEventListener("dblclick", () => {
+          excluirReceita(index);
+        });
+        listaReceitas.appendChild(item);
+      });
+
+      const listaDespesas = document.getElementById("lista-despesas");
+      listaDespesas.innerHTML = "";
+      despesas.forEach((despesa, index) => {
+        const item = document.createElement("li");
+        item.className = "list-group-item despesas";
+        item.innerHTML = `<strong>${despesa.descricao}:</strong> ${despesa.valor.toFixed(2)} MT - <span class="data">${despesa.data}</span>`;
+        item.style.cursor = "pointer";
+        item.addEventListener("dblclick", () => {
+          excluirDespesa(index);
+        });
+        listaDespesas.appendChild(item);
+      });
+
+      const listaDividas = document.getElementById("lista-dividas");
+      listaDividas.innerHTML = "";
+      dividas.forEach((divida, index) => {
+        const item = document.createElement("li");
+        item.className = "list-group-item dividas";
+        if (divida.tipo === "emprestimo") {
+          item.innerHTML = `<strong style="color: blue;">${divida.nome}:</strong> ${divida.valorReal.toFixed(2)} MT | Valor Total a Pagar: ${divida.valor.toFixed(2)} MT | Juros: ${divida.juros.toFixed(2)} MT - <span class="data">${divida.data}</span>`;
+        } else {
+          item.innerHTML = `<strong style="color: blue;">${divida.nome}:</strong> ${divida.valor.toFixed(2)} MT - <span class="data">${divida.data}</span>`;
+        }
+        item.style.cursor = "pointer";
+        item.addEventListener("dblclick", () => {
+          excluirDivida(index);
+        });
+        listaDividas.appendChild(item);
+      });
+
+      const saldoSpan = document.getElementById("saldo-disponivel");
+      saldoSpan.classList.remove("text-success", "text-danger");
+      if (saldoDisponivel > 5000) {
+        saldoSpan.classList.add("text-success");
+      } else {
+        saldoSpan.classList.add("text-danger");
+      }
+
+      verificarDividas();
+    }
+
+    function limparCampos() {
+      document.getElementById("valor-receita").value = "";
+      document.getElementById("valor-despesa").value = "";
+      document.getElementById("valor-divida").value = "";
+    }
+
+    function mostrarOpcoesDivida() {
+      const tipoDivida = document.getElementById("tipo-divida").value;
+      const dividaE = document.getElementById("divida-emprestimo");
+      if (tipoDivida === "emprestimo") {
+        dividaE.style.display = "block";
+      } else {
+        dividaE.style.display = "none";
+      }
+    }
+
+    // Excluir Receita
+    function excluirReceita(index) {
+      if (confirm("Tem certeza que deseja excluir esta receita?")) {
+        receitas.splice(index, 1);
+        atualizarResumo();
+        salvarDados();
+      }
+    }
+
+    // Excluir Despesa
+    function excluirDespesa(index) {
+      if (confirm("Tem certeza que deseja excluir esta despesa?")) {
+        despesas.splice(index, 1);
+        atualizarResumo();
+        salvarDados();
+      }
+    }
+
+    // Excluir Dívida
+    function excluirDivida(index) {
+      if (confirm("Tem certeza que deseja excluir esta dívida?")) {
+        dividas.splice(index, 1);
+        atualizarResumo();
+        salvarDados();
+      }
+    }
+
+    function salvarDados() {
+      db.collection("dados").doc("informacoes").set({
+        receitas: receitas,
+        despesas: despesas,
+        dividas: dividas
+      })
+      .then(() => {
+        console.log("Dados salvos com sucesso!");
+      })
+      .catch((error) => {
+        console.error("Erro ao salvar os dados: ", error);
+      });
+    }
+
+    // Carregar Dados
+    function carregarDados() {
+      db.collection("dados").doc("informacoes").get().then((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          receitas = data.receitas || [];
+          despesas = data.despesas || [];
+          dividas = data.dividas || [];
+          atualizarResumo();
+        } else {
+          console.log("Nenhum dado encontrado!");
+        }
+      }).catch((error) => {
+        console.error("Erro ao carregar os dados: ", error);
+      });
+    }
+
+    carregarDados();
+
+  </script>
+</body>
+</html>
