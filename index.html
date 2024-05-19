@@ -1,174 +1,253 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestão Financeira Pessoal</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
-    body {
-      background-color: #f8f9fa;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle Financeiro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f5;
+            margin: 0;
+            padding: 0;
+        }
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-    .card {
-      margin-top: 20px;
-      box-shadow: 0 0 15px;
-    }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
 
-    .card-title {
-      font-size: 1.5rem;
-    }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
 
-    .form-group {
-      margin-bottom: 1rem;
-    }
+        input, select, button {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
 
-    .receitas {
-      color:blue;
-      box-shadow: 0 0 15px;
-    }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-    .despesas {
-      color: #fff;
-     font-weight:bold 
-      
-    }
+        button:hover {
+            background-color: #0056b3;
+        }
 
-    .dividas {
-      color: #fff ;
-      background-color:red ;
-      
-    }
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
 
-    .saldo {
-      font-weight: bold;
-    }
+        .card.receitas {
+            border-left: 5px solid #28a745; /* Verde */
+        }
 
-    h1 {
-      display: inline-block;
-      box-shadow: 0 0 15px;
-      background-color: aqua;
-      padding: 10px 20px; 
-    }
-    p{
-      background-color:#000000;
-      color:#fff ;
-    }
-  </style>
+        .card.despesas {
+            border-left: 5px solid #dc3545; /* Vermelho */
+        }
+
+        .card.dividas {
+            border-left: 5px solid #ffc107; /* Amarelo */
+        }
+
+        .card.reembolsos {
+            border-left: 5px solid #007bff; /* Azul */
+        }
+
+        .card.saldo {
+            border-left: 5px solid #6c757d; /* Cinza */
+        }
+
+        .saldo-valor {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .saldo-valor.red {
+            color: red;
+        }
+
+        .saldo-valor.green {
+            color: green;
+        }
+
+        .saldo-valor.yellow {
+            color: #ffc107;
+        }
+
+        .saldo-valor.blue {
+            color: #007bff;
+        }
+
+        .saldo-valor.grey {
+            color: #6c757d;
+        }
+
+        .item-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .item {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            position: relative;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        .item-title {
+            font-weight: bold;
+        }
+
+        .item-date {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .delete-button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 5px 10px;
+            display: none;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1 class="text-center mt-4 mb-5">Gestão Financeira Pessoal</h1>
+    <div class="container">
+        <h1>Controle Financeiro</h1>
 
-    <div class="row">
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title text-center">Receitas</h5>
-            <form>
-              <div class="form-group">
-                <label for="tipo-receita">Tipo de Receita:</label>
-                <select id="tipo-receita" class="form-control">
-                  <option value="">Selecione...</option>
-                  <option value="salario">Salário</option>
-                  <option value="renda-extra">Renda Extra</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="valor-receita">Valor (MT):</label>
-                <input type="number" id="valor-receita" class="form-control">
-              </div>
-              <button type="button" class="btn btn-success btn-block" onclick="adicionarReceita()">Adicionar</button>
-            </form>
-          </div>
+        <div class="card receitas">
+            <h2>Adicionar Receita</h2>
+            <label for="receita-tipo">Tipo</label>
+            <input type="text" id="receita-tipo">
+            <label for="receita-valor">Valor</label>
+            <input type="number" id="receita-valor">
+            <button onclick="adicionarReceita()">Adicionar Receita</button>
         </div>
-      </div>
 
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title text-center">Despesas</h5>
-            <form>
-              <div class="form-group">
-                <label for="descricao-despesa">Descrição:</label>
-                <input type="text" id="descricao-despesa" class="form-control">
-              </div>
-              <div class="form-group">
-                <label for="valor-despesa">Valor (MT):</label>
-                <input type="number" id="valor-despesa" class="form-control">
-              </div>
-              <button type="button" class="btn btn-danger btn-block" onclick="adicionarDespesa()">Adicionar</button>
-            </form>
-          </div>
+        <div class="card despesas">
+            <h2>Adicionar Despesa</h2>
+            <label for="despesa-nome">Nome</label>
+            <input type="text" id="despesa-nome">
+            <label for="despesa-valor">Valor</label>
+            <input type="number" id="despesa-valor">
+            <button onclick="adicionarDespesa()">Adicionar Despesa</button>
         </div>
-      </div>
 
-      <div class="col-md-4">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title text-center">Dívidas</h5>
-            <form>
-              <div class="form-group">
-                <label for="tipo-divida">Tipo de Dívida:</label>
-                <select id="tipo-divida" class="form-control" onchange="mostrarOpcoesDivida()">
-                  <option value="">Selecione...</option>
-                  <option value="normal">Dívida Normal</option>
-                  <option value="emprestimo">Dívida por Empréstimo</option>
+        <div class="card dividas">
+            <h2>Adicionar Dívida</h2>
+            <label for="divida-tipo">Tipo</label>
+            <select id="divida-tipo" onchange="toggleEmprestimoOptions()">
+                <option value="normal">Normal</option>
+                <option value="emprestimo">Empréstimo</option>
+            </select>
+            <label for="divida-nome">Nome</label>
+            <input type="text" id="divida-nome">
+            <label for="divida-valor">Valor</label>
+            <input type="number" id="divida-valor">
+            <div id="emprestimo-options" class="hidden">
+                <label for="divida-percentual">Percentual</label>
+                <select id="divida-percentual">
+                    <option value="20">20%</option>
+                    <option value="25">25%</option>
+                    <option value="30">30%</option>
+                    <option value="35">35%</option>
+                    <option value="40">40%</option>
                 </select>
-              </div>
-              <div class="form-group">
-                <label for="nome-divida">Nome da Dívida:</label>
-                <input type="text" id="nome-divida" class="form-control">
-              </div>
-              <div class="form-group" id="divida-emprestimo" style="display: none;">
-                <label for="percentual-divida">Percentual:</label>
-                <select id="percentual-divida" class="form-control">
-                  <option value="">Selecione...</option>
-                  <option value="0.2">20%</option>
-                  <option value="0.25">25%</option>
-                  <option value="0.3">30%</option>
-                  <option value="0.4">40%</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="valor-divida">Valor (MT):</label>
-                <input type="number" id="valor-divida" class="form-control">
-              </div>
-              <button type="button" class="btn btn-warning btn-block" onclick="adicionarDivida()">Adicionar</button>
-            </form>
-          </div>
+            </div>
+            <button onclick="adicionarDivida()">Adicionar Dívida</button>
         </div>
-      </div>
+
+        <div class="card reembolsos">
+            <h2>Calcular Reembolso</h2>
+            <label for="reembolso-nome">Nome da Dívida</label>
+            <select id="reembolso-nome"></select>
+            <label for="reembolso-valor">Valor</label>
+            <input type="number" id="reembolso-valor">
+            <button onclick="calcularReembolso()">Calcular Reembolso</button>
+        </div>
+
+        <div class="card saldo">
+            <h2>Resumo</h2>
+            <div class="resumo" id="resumo">
+                <p id="resumo-receitas">Total de Receitas: 0 MT</p>
+                <p id="resumo-despesas">Total de Despesas: 0 MT</p>
+                <p id="resumo-dividas">Total de Dívidas: 0 MT</p>
+                <p id="resumo-reembolsos">Total de Reembolsos: 0 MT</p>
+                <p id="saldo-disponivel">Saldo Disponível: <span id="saldo-valor" class="saldo-valor grey">0 MT</span></p>
+            </div>
+        </div>
+
+        <div class="card receitas">
+            <h3>Receitas</h3>
+            <ul id="lista-receitas" class="item-list"></ul>
+        </div>
+        
+        <div class="card despesas">
+            <h3>Despesas</h3>
+            <ul id="lista-despesas" class="item-list"></ul>
+        </div>
+        
+        <div class="card dividas">
+            <h3>Dívidas</h3>
+            <ul id="lista-dividas" class="item-list"></ul>
+        </div>
+
+        <div class="card reembolsos">
+            <h3>Reembolsos</h3>
+            <ul id="lista-reembolsos" class="item-list"></ul>
+        </div>
+
+        <div class="card">
+            <h2>Excluir Tudo</h2>
+            <label for="senha">Senha</label>
+            <input type="password" id="senha">
+            <button onclick="excluirTudo()">Excluir Tudo</button>
+        </div>
     </div>
 
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title text-center">Resumo</h5>
-        <p class="text-center receitas-title"><strong>Receitas:</strong></p>
-        <ul id="lista-receitas" class="list-group mb-3"></ul>
-        <p class="text-center despesas-title"><strong>Despesas:</strong></p>
-        <ul id="lista-despesas" class="list-group mb-3"></ul>
-        <p class="text-center dividas-title"><strong>Dívidas:</strong></p>
-        <ul id="lista-dividas" class="list-group mb-3"></ul>
-        <p class="text-center saldo">Saldo Disponível: <span id="saldo-disponivel" class="saldo">0.00</span> MT</p>
-        <p class="text-center dividas" id="total-dividas">Total de dívidas a pagar: 0.00 MT</p>
-        <p class="text-center despesas" id="total-despesas">Total de todas as despesas feitas: <strong>0.00 MT</strong></p>
-        <p id="aviso-dividas" class="text-danger text-center"></p>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-  <script>
-    // Initialize Firebase
- const firebaseConfig = {
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script>
+        // Configuração do Firebase
+        const firebaseConfig = {
   apiKey: "AIzaSyD8XOHaLCzNLDrIlHG3em4g4gyYIKTLWpQ",
   authDomain: "xitique-61310.firebaseapp.com",
   databaseURL: "https://xitique-61310-default-rtdb.firebaseio.com",
@@ -178,230 +257,219 @@
   appId: "1:331274991404:web:2fec0eb082d3fe0b33de89",
   measurementId: "G-DFDMBKW1RK"
 };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+        let receitas = [];
+        let despesas = [];
+        let dividas = [];
+        let reembolsos = [];
 
-    let receitas = [];
-    let despesas = [];
-    let dividas = [];
-    const rendaMensal = 10700; // Montante da renda mensal em MT
-
-    function adicionarReceita() {
-      const tipo = document.getElementById("tipo-receita").value;
-      const valor = parseFloat(document.getElementById("valor-receita").value);
-      const data = new Date().toLocaleString();
-      receitas.push({ tipo, valor, data });
-      atualizarResumo();
-      limparCampos();
-      salvarDados();
-    }
-
-    function adicionarDespesa() {
-      const descricao = document.getElementById("descricao-despesa").value;
-      const valor = parseFloat(document.getElementById("valor-despesa").value);
-      const data = new Date().toLocaleString();
-      despesas.push({ descricao, valor, data });
-      atualizarResumo();
-      limparCampos();
-      salvarDados();
-    }
-
-    function adicionarDivida() {
-      const valor = parseFloat(document.getElementById("valor-divida").value);
-      const tipo = document.getElementById("tipo-divida").value;
-      const nome = document.getElementById("nome-divida").value;
-      const data = new Date().toLocaleString();
-      if (tipo === "normal") {
-        dividas.push({ tipo, valor, nome, data });
-      } else {
-        const percentual = parseFloat(document.getElementById("percentual-divida").value);
-        const juros = valor * percentual;
-        dividas.push({ tipo, valor: valor + juros, valorReal: valor, juros, nome, data });
-      }
-      verificarDividas();
-      atualizarResumo();
-      limparCampos();
-      salvarDados();
-    }
-
-    function calcularTotalReceitas() {
-      return receitas.reduce((total, receita) => total + receita.valor, 0);
-    }
-
-    function calcularTotalDespesas() {
-      return despesas.reduce((total, despesa) => total + despesa.valor, 0);
-    }
-
-    function calcularTotalDividas() {
-      return dividas.reduce((total, divida) => total + divida.valor, 0);
-    }
-
-    function calcularTotalDividasReais() {
-      return dividas.reduce((total, divida) => total + divida.valorReal, 0);
-    }
-
-    function calcularSaldoDisponivel() {
-      const totalReceitas = calcularTotalReceitas();
-      const totalDespesas = calcularTotalDespesas();
-      return totalReceitas - totalDespesas;
-    }
-
-    function verificarDividas() {
-      const totalDividas = calcularTotalDividas();
-      const totalDividasReais = calcularTotalDividasReais();
-      const saldoDisponivel = calcularSaldoDisponivel();
-      const saldoDisponivelMes = saldoDisponivel + totalDividasReais;
-
-      const avisoDividas = document.getElementById("aviso-dividas");
-      avisoDividas.textContent = "";
-
-      if (saldoDisponivelMes < 0) {
-        avisoDividas.textContent = "Atenção! Suas dívidas estão ultrapassando sua renda mensal!";
-      }
-    }
-
-    function atualizarResumo() {
-      const totalReceitas = calcularTotalReceitas();
-      const totalDespesas = calcularTotalDespesas();
-      const totalDividas = calcularTotalDividas();
-      const totalDividasReais = calcularTotalDividasReais();
-      const saldoDisponivel = calcularSaldoDisponivel();
-
-      document.getElementById("saldo-disponivel").textContent = saldoDisponivel.toFixed(2);
-      document.getElementById("total-dividas").textContent = `Total de dívidas a pagar: ${totalDividas.toFixed(2)} MT`;
-      document.getElementById("total-despesas").textContent = `Total de todas as despesas feitas: ${totalDespesas.toFixed(2)} MT`;
-
-      const listaReceitas = document.getElementById("lista-receitas");
-      listaReceitas.innerHTML = "";
-      receitas.forEach((receita, index) => {
-        const item = document.createElement("li");
-        item.className = "list-group-item receitas";
-        item.innerHTML = `<strong>${receita.tipo}:</strong> ${receita.valor.toFixed(2)} MT - <span class="data">${receita.data}</span>`;
-        item.style.cursor = "pointer";
-        item.addEventListener("dblclick", () => {
-          excluirReceita(index);
-        });
-        listaReceitas.appendChild(item);
-      });
-
-      const listaDespesas = document.getElementById("lista-despesas");
-      listaDespesas.innerHTML = "";
-      despesas.forEach((despesa, index) => {
-        const item = document.createElement("li");
-        item.className = "list-group-item despesas";
-        item.innerHTML = `<strong>${despesa.descricao}:</strong> ${despesa.valor.toFixed(2)} MT - <span class="data">${despesa.data}</span>`;
-        item.style.cursor = "pointer";
-        item.addEventListener("dblclick", () => {
-          excluirDespesa(index);
-        });
-        listaDespesas.appendChild(item);
-      });
-
-      const listaDividas = document.getElementById("lista-dividas");
-      listaDividas.innerHTML = "";
-      dividas.forEach((divida, index) => {
-        const item = document.createElement("li");
-        item.className = "list-group-item dividas";
-        if (divida.tipo === "emprestimo") {
-          item.innerHTML = `<strong style="color: blue;">${divida.nome}:</strong> ${divida.valorReal.toFixed(2)} MT | Valor Total a Pagar: ${divida.valor.toFixed(2)} MT | Juros: ${divida.juros.toFixed(2)} MT - <span class="data">${divida.data}</span>`;
-        } else {
-          item.innerHTML = `<strong style="color: blue;">${divida.nome}:</strong> ${divida.valor.toFixed(2)} MT - <span class="data">${divida.data}</span>`;
+        function toggleEmprestimoOptions() {
+            const tipo = document.getElementById('divida-tipo').value;
+            const emprestimoOptions = document.getElementById('emprestimo-options');
+            emprestimoOptions.style.display = tipo === 'emprestimo' ? 'block' : 'none';
         }
-        item.style.cursor = "pointer";
-        item.addEventListener("dblclick", () => {
-          excluirDivida(index);
-        });
-        listaDividas.appendChild(item);
-      });
 
-      const saldoSpan = document.getElementById("saldo-disponivel");
-      saldoSpan.classList.remove("text-success", "text-danger");
-      if (saldoDisponivel > 5000) {
-        saldoSpan.classList.add("text-success");
-      } else {
-        saldoSpan.classList.add("text-danger");
-      }
+        // Adicionar receita
+        function adicionarReceita() {
+            const tipo = document.getElementById('receita-tipo').value;
+            const valor = parseFloat(document.getElementById('receita-valor').value);
+            const data = new Date();
 
-      verificarDividas();
-    }
+            if (tipo.trim() === '' || isNaN(valor) || valor <= 0) {
+                alert('Por favor, preencha todos os campos corretamente.');
+                return;
+            }
 
-    function limparCampos() {
-      document.getElementById("valor-receita").value = "";
-      document.getElementById("valor-despesa").value = "";
-      document.getElementById("valor-divida").value = "";
-    }
-
-    function mostrarOpcoesDivida() {
-      const tipoDivida = document.getElementById("tipo-divida").value;
-      const dividaE = document.getElementById("divida-emprestimo");
-      if (tipoDivida === "emprestimo") {
-        dividaE.style.display = "block";
-      } else {
-        dividaE.style.display = "none";
-      }
-    }
-
-    // Excluir Receita
-    function excluirReceita(index) {
-      if (confirm("Tem certeza que deseja excluir esta receita?")) {
-        receitas.splice(index, 1);
-        atualizarResumo();
-        salvarDados();
-      }
-    }
-
-    // Excluir Despesa
-    function excluirDespesa(index) {
-      if (confirm("Tem certeza que deseja excluir esta despesa?")) {
-        despesas.splice(index, 1);
-        atualizarResumo();
-        salvarDados();
-      }
-    }
-
-    // Excluir Dívida
-    function excluirDivida(index) {
-      if (confirm("Tem certeza que deseja excluir esta dívida?")) {
-        dividas.splice(index, 1);
-        atualizarResumo();
-        salvarDados();
-      }
-    }
-
-    function salvarDados() {
-      db.collection("dados").doc("informacoes").set({
-        receitas: receitas,
-        despesas: despesas,
-        dividas: dividas
-      })
-      .then(() => {
-        console.log("Dados salvos com sucesso!");
-      })
-      .catch((error) => {
-        console.error("Erro ao salvar os dados: ", error);
-      });
-    }
-
-    // Carregar Dados
-    function carregarDados() {
-      db.collection("dados").doc("informacoes").get().then((doc) => {
-        if (doc.exists) {
-          const data = doc.data();
-          receitas = data.receitas || [];
-          despesas = data.despesas || [];
-          dividas = data.dividas || [];
-          atualizarResumo();
-        } else {
-          console.log("Nenhum dado encontrado!");
+            const receita = { tipo, valor, data };
+            db.collection('receitas').add(receita);
+            document.getElementById('receita-tipo').value = '';
+            document.getElementById('receita-valor').value = '';
         }
-      }).catch((error) => {
-        console.error("Erro ao carregar os dados: ", error);
-      });
-    }
 
-    carregarDados();
+        // Adicionar despesa
+        function adicionarDespesa() {
+            const nome = document.getElementById('despesa-nome').value;
+            const valor = parseFloat(document.getElementById('despesa-valor').value);
+            const data = new Date();
 
-  </script>
+            if (isNaN(valor) || valor <= 0) {
+                alert('Por favor, preencha todos os campos corretamente.');
+                return;
+            }
+
+            const despesa = { nome, valor, data };
+            db.collection('despesas').add(despesa);
+            document.getElementById('despesa-nome').value = '';
+            document.getElementById('despesa-valor').value = '';
+        }
+
+        // Adicionar dívida
+        function adicionarDivida() {
+            const tipo = document.getElementById('divida-tipo').value;
+            const nome = document.getElementById('divida-nome').value;
+            const valor = parseFloat(document.getElementById('divida-valor').value);
+            const percentual = tipo === 'emprestimo' ? parseInt(document.getElementById('divida-percentual').value) : 0;
+            const valorFinal = tipo === 'emprestimo' ? valor + (valor * (percentual / 100)) : valor;
+            const data = new Date();
+
+            if (isNaN(valor) || valor <= 0) {
+                alert('Por favor, preencha todos os campos corretamente.');
+                return;
+            }
+
+            const divida = { tipo, nome, valor, valorFinal, percentual, data };
+            db.collection('dividas').add(divida);
+            document.getElementById('divida-tipo').value = 'normal';
+            document.getElementById('divida-nome').value = '';
+            document.getElementById('divida-valor').value = '';
+            document.getElementById('divida-percentual').value = '20';
+            toggleEmprestimoOptions();
+        }
+
+        // Calcular reembolso
+        function calcularReembolso() {
+            const nome = document.getElementById('reembolso-nome').value;
+            const valor = parseFloat(document.getElementById('reembolso-valor').value);
+            const data = new Date();
+
+            if (isNaN(valor) || valor <= 0) {
+                alert('Por favor, preencha todos os campos corretamente.');
+                return;
+            }
+
+            const reembolso = { nome, valor, data };
+            db.collection('reembolsos').add(reembolso);
+            document.getElementById('reembolso-valor').value = '';
+        }
+
+        // Excluir tudo
+        function excluirTudo() {
+            const senha = document.getElementById('senha').value;
+            if (senha !== 'bin') {
+                alert('Senha incorreta!');
+                return;
+            }
+
+            const collections = ['receitas', 'despesas', 'dividas', 'reembolsos'];
+            collections.forEach(collection => {
+                db.collection(collection).get().then(querySnapshot => {
+                    querySnapshot.forEach(doc => {
+                        doc.ref.delete();
+                    });
+                });
+            });
+            document.getElementById('senha').value = '';
+        }
+
+        // Atualizar resumo
+        function atualizarResumo() {
+            const totalReceitas = receitas.reduce((acc, receita) => acc + receita.valor, 0);
+            const totalDespesas = despesas.reduce((acc, despesa) => acc + despesa.valor, 0);
+            const totalDividas = dividas.reduce((acc, divida) => acc + divida.valor, 0);
+            const totalDividasSemJuros = dividas.reduce((acc, divida) => acc + divida.valor, 0);
+            const totalReembolsos = reembolsos.reduce((acc, reembolso) => acc + reembolso.valor, 0);
+            const saldoDisponivel = (totalReceitas + totalDividasSemJuros) - totalDespesas;
+
+            document.getElementById('resumo-receitas').innerText = `Total de Receitas: ${totalReceitas.toFixed(2)} MT`;
+            document.getElementById('resumo-despesas').innerText = `Total de Despesas: ${totalDespesas.toFixed(2)} MT`;
+            document.getElementById('resumo-dividas').innerText = `Total de Dívidas: ${totalDividas.toFixed(2)} MT`;
+            document.getElementById('resumo-reembolsos').innerText = `Total de Reembolsos: ${totalReembolsos.toFixed(2)} MT`;
+
+            const saldoValorEl = document.getElementById('saldo-valor');
+            saldoValorEl.innerText = `${saldoDisponivel.toFixed(2)} MT`;
+            saldoValorEl.className = 'saldo-valor ' + (saldoDisponivel >= 5000 ? 'green' : 'red');
+        }
+
+        // Listener para atualizações em tempo real
+        db.collection('receitas').onSnapshot(querySnapshot => {
+            receitas = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+            const listaReceitas = document.getElementById('lista-receitas');
+            listaReceitas.innerHTML = '';
+            receitas.forEach((receita) => {
+                const li = document.createElement('li');
+                li.classList.add('item');
+                li.innerHTML = `
+                    <span class="item-title">${receita.tipo}: ${receita.valor} MT</span>
+                    <span class="item-date">${new Date(receita.data.seconds * 1000).toLocaleString()}</span>
+                    <button class="delete-button" onclick="excluirItem('receitas', '${receita.id}')">Excluir</button>
+                `;
+                li.addEventListener('dblclick', () => {
+                    const deleteButton = li.querySelector('.delete-button');
+                    deleteButton.style.display = deleteButton.style.display === 'none' ? 'block' : 'none';
+                });
+                listaReceitas.appendChild(li);
+            });
+            atualizarResumo();
+        });
+
+        db.collection('despesas').onSnapshot(querySnapshot => {
+            despesas = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+            const listaDespesas = document.getElementById('lista-despesas');
+            listaDespesas.innerHTML = '';
+            despesas.forEach((despesa) => {
+                const li = document.createElement('li');
+                li.classList.add('item');
+                li.innerHTML = `
+                    <span class="item-title">${despesa.nome}: ${despesa.valor} MT</span>
+                    <span class="item-date">${new Date(despesa.data.seconds * 1000).toLocaleString()}</span>
+                    <button class="delete-button" onclick="excluirItem('despesas', '${despesa.id}')">Excluir</button>
+                `;
+                li.addEventListener('dblclick', () => {
+                    const deleteButton = li.querySelector('.delete-button');
+                    deleteButton.style.display = deleteButton.style.display === 'none' ? 'block' : 'none';
+                });
+                listaDespesas.appendChild(li);
+            });
+            atualizarResumo();
+        });
+
+        db.collection('dividas').onSnapshot(querySnapshot => {
+            dividas = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+            const listaDividas = document.getElementById('lista-dividas');
+            listaDividas.innerHTML = '';
+            dividas.forEach((divida) => {
+                const li = document.createElement('li');
+                li.classList.add('item');
+                li.innerHTML = `
+                    <span class="item-title">${divida.nome}: ${divida.valor} MT (Final: ${divida.valorFinal} MT)</span>
+                    <span class="item-date">${new Date(divida.data.seconds * 1000).toLocaleString()}</span>
+                    <button class="delete-button" onclick="excluirItem('dividas', '${divida.id}')">Excluir</button>
+                `;
+                li.addEventListener('dblclick', () => {
+                    const deleteButton = li.querySelector('.delete-button');
+                    deleteButton.style.display = deleteButton.style.display === 'none' ? 'block' : 'none';
+                });
+                listaDividas.appendChild(li);
+            });
+            atualizarResumo();
+        });
+
+        db.collection('reembolsos').onSnapshot(querySnapshot => {
+            reembolsos = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+            const listaReembolsos = document.getElementById('lista-reembolsos');
+            listaReembolsos.innerHTML = '';
+            reembolsos.forEach((reembolso) => {
+                const li = document.createElement('li');
+                li.classList.add('item');
+                li.innerHTML = `
+                    <span class="item-title">${reembolso.nome}: ${reembolso.valor} MT</span>
+                    <span class="item-date">${new Date(reembolso.data.seconds * 1000).toLocaleString()}</span>
+                    <button class="delete-button" onclick="excluirItem('reembolsos', '${reembolso.id}')">Excluir</button>
+                `;
+                li.addEventListener('dblclick', () => {
+                    const deleteButton = li.querySelector('.delete-button');
+                    deleteButton.style.display = deleteButton.style.display === 'none' ? 'block' : 'none';
+                });
+                listaReembolsos.appendChild(li);
+            });
+            atualizarResumo();
+        });
+
+        function excluirItem(colecao, id) {
+            db.collection(colecao).doc(id).delete();
+        }
+    </script>
 </body>
 </html>
