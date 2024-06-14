@@ -11,23 +11,24 @@
             margin: 0;
             padding: 0;
         }
-.pago {
-    color: #28a745; /* Verde vivo */
-    font-weight: bold;
-}
 
-.remanescente {
-    color: #dc3545; /* Vermelho vivo */
-    font-weight: bold;
-}
+        .pago {
+            color: #28a745; /* Verde vivo */
+            font-weight: bold;
+        }
 
-.lista-pago {
-    border-left: 5px solid #28a745;
-}
+        .remanescente {
+            color: #dc3545; /* Vermelho vivo */
+            font-weight: bold;
+        }
 
-.lista-remanescente {
-    border-left: 5px solid #dc3545;
-}
+        .lista-pago {
+            border-left: 5px solid #28a745;
+        }
+
+        .lista-remanescente {
+            border-left: 5px solid #dc3545;
+        }
 
         .container {
             max-width: 800px;
@@ -252,15 +253,14 @@
             <ul id="lista-reembolsos" class="item-list"></ul>
         </div>
         <div class="card lista-pago">
-    <h3>Pagos</h3>
-    <ul id="lista-pago" class="item-list"></ul>
-</div>
+            <h3>Pagos</h3>
+            <ul id="lista-pago" class="item-list"></ul>
+        </div>
 
-<div class="card lista-remanescente">
-    <h3>Remanescentes</h3>
-    <ul id="lista-remanescente" class="item-list"></ul>
-</div>
-
+        <div class="card lista-remanescente">
+            <h3>Remanescentes</h3>
+            <ul id="lista-remanescente" class="item-list"></ul>
+        </div>
 
         <div class="card">
             <h2>Excluir Tudo</h2>
@@ -270,284 +270,114 @@
         </div>
     </div>
     
-
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script>
         // Configuração do Firebase
-        // Configuração do Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyD8XOHaLCzNLDrIlHG3em4g4gyYIKTLWpQ",
-    authDomain: "xitique-61310.firebaseapp.com",
-    databaseURL: "https://xitique-61310-default-rtdb.firebaseio.com",
-    projectId: "xitique-61310",
-    storageBucket: "xitique-61310.appspot.com",
-    messagingSenderId: "331274991404",
-    appId: "1:331274991404:web:2fec0eb082d3fe0b33de89",
-    measurementId: "G-DFDMBKW1RK"
+        const firebaseConfig = {
+  apiKey: "AIzaSyD8XOHaLCzNLDrIlHG3em4g4gyYIKTLWpQ",
+  authDomain: "xitique-61310.firebaseapp.com",
+  databaseURL: "https://xitique-61310-default-rtdb.firebaseio.com",
+  projectId: "xitique-61310",
+  storageBucket: "xitique-61310.appspot.com",
+  messagingSenderId: "331274991404",
+  appId: "1:331274991404:web:2fec0eb082d3fe0b33de89",
+  measurementId: "G-DFDMBKW1RK"
 };
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
-let receitas = [];
-let despesas = [];
-let dividas = [];
-let reembolsos = [];
-
-function toggleEmprestimoOptions() {
-    const tipo = document.getElementById('divida-tipo').value;
-    const emprestimoOptions = document.getElementById('emprestimo-options');
-    emprestimoOptions.style.display = tipo === 'emprestimo' ? 'block' : 'none';
-}
-
-// Adicionar receita
-function adicionarReceita() {
-    const tipo = document.getElementById('receita-tipo').value;
-    const valor = parseFloat(document.getElementById('receita-valor').value);
-    const data = new Date();
-
-    if (tipo.trim() === '' || isNaN(valor) || valor <= 0) {
-        alert('Por favor, preencha todos os campos corretamente.');
-        return;
-    }
-
-    const receita = { tipo, valor, data };
-    db.collection('receitas').add(receita);
-    document.getElementById('receita-tipo').value = '';
-    document.getElementById('receita-valor').value = '';
-}
-
-// Adicionar despesa
-function adicionarDespesa() {
-    const nome = document.getElementById('despesa-nome').value;
-    const valor = parseFloat(document.getElementById('despesa-valor').value);
-    const data = new Date();
-
-    if (isNaN(valor) || valor <= 0) {
-        alert('Por favor, preencha todos os campos corretamente.');
-        return;
-    }
-
-    const despesa = { nome, valor, data };
-    db.collection('despesas').add(despesa);
-    document.getElementById('despesa-nome').value = '';
-    document.getElementById('despesa-valor').value = '';
-}
-
-// Adicionar dívida
-function adicionarDivida() {
-    const tipo = document.getElementById('divida-tipo').value;
-    const nome = document.getElementById('divida-nome').value;
-    const valor = parseFloat(document.getElementById('divida-valor').value);
-    const percentual = tipo === 'emprestimo' ? parseInt(document.getElementById('divida-percentual').value) : 0;
-    const valorFinal = tipo === 'emprestimo' ? valor + (valor * (percentual / 100)) : valor;
-    const data = new Date();
-
-    if (isNaN(valor) || valor <= 0) {
-        alert('Por favor, preencha todos os campos corretamente.');
-        return;
-    }
-
-    const divida = { tipo, nome, valor, valorFinal, percentual, data };
-    db.collection('dividas').add(divida);
-    document.getElementById('divida-tipo').value = 'normal';
-    document.getElementById('divida-nome').value = '';
-    document.getElementById('divida-valor').value = '';
-    document.getElementById('divida-percentual').value = '20';
-    toggleEmprestimoOptions();
-}
-
-// Calcular reembolso
-function calcularReembolso() {
-    const nome = document.getElementById('reembolso-nome').value;
-    const valor = parseFloat(document.getElementById('reembolso-valor').value);
-    const data = new Date();
-
-    if (isNaN(valor) || valor <= 0) {
-        alert('Por favor, preencha todos os campos corretamente.');
-        return;
-    }
-
-    const reembolso = { nome, valor, data };
-    db.collection('reembolsos').add(reembolso);
-    document.getElementById('reembolso-valor').value = '';
-}
-
-// Excluir tudo
-function excluirTudo() {
-    const senha = document.getElementById('senha').value;
-    if (senha !== 'bin') {
-        alert('Senha incorreta!');
-        return;
-    }
-
-    const collections = ['receitas', 'despesas', 'dividas', 'reembolsos'];
-    collections.forEach(collection => {
-        db.collection(collection).get().then(querySnapshot => {
-            querySnapshot.forEach(doc => {
-                doc.ref.delete();
-            });
-        });
-    });
-    document.getElementById('senha').value = '';
-}
-
-// Atualizar resumo
-function atualizarResumo() {
-    const totalReceitas = receitas.reduce((acc, receita) => acc + receita.valor, 0);
-    const totalDespesas = despesas.reduce((acc, despesa) => acc + despesa.valor, 0);
-    const totalDividas = dividas.reduce((acc, divida) => acc + divida.valor, 0);
-    const totalReembolsos = reembolsos.reduce((acc, reembolso) => acc + reembolso.valor, 0);
-    const saldoDisponivel = totalDividas + totalReceitas - totalDespesas - totalReembolsos;
-
-    document.getElementById('resumo-receitas').innerText = `Total de Receitas: ${totalReceitas.toFixed(2)} MT`;
-    document.getElementById('resumo-despesas').innerText = `Total de Despesas: ${totalDespesas.toFixed(2)} MT`;
-    document.getElementById('resumo-dividas').innerText = `Total de Dívidas: ${totalDividas.toFixed(2)} MT`;
-    document.getElementById('resumo-reembolsos').innerText = `Total de Reembolsos: ${totalReembolsos.toFixed(2)} MT`;
-
-    const saldoValorEl = document.getElementById('saldo-valor');
-    saldoValorEl.innerText = `${saldoDisponivel.toFixed(2)} MT`;
-    saldoValorEl.className = 'saldo-valor ' + (saldoDisponivel >= 5000 ? 'green' : 'red');
-
-    atualizarStatusReembolsos();
-}
-
-// Listener para atualizações em tempo real
-db.collection('receitas').onSnapshot(querySnapshot => {
-    receitas = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-    const listaReceitas = document.getElementById('lista-receitas');
-    listaReceitas.innerHTML = '';
-    receitas.forEach((receita) => {
-        const li = document.createElement('li');
-        li.classList.add('item');
-        li.innerHTML = `
-            <span class="item-title">${receita.tipo}: ${receita.valor} MT</span>
-            <span class="item-date">${new Date(receita.data.seconds * 1000).toLocaleString()}</span>
-            <button class="delete-button" onclick="excluirItem('receitas', '${receita.id}')">Excluir</button>
-        `;
-        li.addEventListener('dblclick', () => {
-            const deleteButton = li.querySelector('.delete-button');
-            deleteButton.style.display = deleteButton.style.display === 'none' ? 'block' : 'none';
-        });
-        listaReceitas.appendChild(li);
-    });
-    atualizarResumo();
-});
-
-db.collection('despesas').onSnapshot(querySnapshot => {
-    despesas = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-    const listaDespesas = document.getElementById('lista-despesas');
-    listaDespesas.innerHTML = '';
-    despesas.forEach((despesa) => {
-        const li = document.createElement('li');
-        li.classList.add('item');
-        li.innerHTML = `
-            <span class="item-title">${despesa.nome}: ${despesa.valor} MT</span>
-            <span class="item-date">${new Date(despesa.data.seconds * 1000).toLocaleString()}</span>
-            <button class="delete-button" onclick="excluirItem('despesas', '${despesa.id}')">Excluir</button>
-        `;
-        li.addEventListener('dblclick', () => {
-            const deleteButton = li.querySelector('.delete-button');
-            deleteButton.style.display = deleteButton.style.display === 'none' ? 'block' : 'none';
-        });
-        listaDespesas.appendChild(li);
-    });
-    atualizarResumo();
-});
-
-db.collection('dividas').onSnapshot(querySnapshot => {
-    dividas = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-    const listaDividas = document.getElementById('lista-dividas');
-    listaDividas.innerHTML = '';
-    dividas.forEach((divida) => {
-        const li = document.createElement('li');
-        li.classList.add('item');
-        li.innerHTML = `
-            <span class="item-title">${divida.nome}: ${divida.valor} MT (Final: ${divida.valorFinal} MT)</span>
-            <span class="item-date">${new Date(divida.data.seconds * 1000).toLocaleString()}</span>
-            <button class="delete-button" onclick="excluirItem('dividas', '${divida.id}')">Excluir</button>
-        `;
-        li.addEventListener('dblclick', () => {
-            const deleteButton = li.querySelector('.delete-button');
-            deleteButton.style.display = deleteButton.style.display === 'none' ? 'block' : 'none';
-        });
-        listaDividas.appendChild(li);
-    });
-    atualizarResumo();
-    preencherOpcoesReembolso();
-});
-
-db.collection('reembolsos').onSnapshot(querySnapshot => {
-    reembolsos = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-    const listaReembolsos = document.getElementById('lista-reembolsos');
-    listaReembolsos.innerHTML = '';
-    reembolsos.forEach((reembolso) => {
-        const li = document.createElement('li');
-        li.classList.add('item');
-        li.innerHTML = `
-            <span class="item-title">${reembolso.nome}: ${reembolso.valor} MT</span>
-            <span class="item-date">${new Date(reembolso.data.seconds * 1000).toLocaleString()}</span>
-            <button class="delete-button" onclick="excluirItem('reembolsos', '${reembolso.id}')">Excluir</button>
-        `;
-        li.addEventListener('dblclick', () => {
-            const deleteButton = li.querySelector('.delete-button');
-            deleteButton.style.display = deleteButton.style.display === 'none' ? 'block' : 'none';
-        });
-        listaReembolsos.appendChild(li);
-    });
-    atualizarResumo();
-});
-
-// Excluir item
-function excluirItem(collection, id) {
-    db.collection(collection).doc(id).delete();
-}
-
-// Preencher opções de reembolso
-function preencherOpcoesReembolso() {
-    const selectReembolsoNome = document.getElementById('reembolso-nome');
-    selectReembolsoNome.innerHTML = ''; // Limpa as opções atuais
-
-    dividas.forEach((divida) => {
-        const option = document.createElement('option');
-        option.value = divida.nome;
-        option.text = divida.nome;
-        selectReembolsoNome.appendChild(option);
-    });
-}
-
-// Atualizar status dos reembolsos
-function atualizarStatusReembolsos() {
-    const listaPago = document.getElementById('lista-pago');
-    const listaRemanescente = document.getElementById('lista-remanescente');
-    listaPago.innerHTML = '';
-    listaRemanescente.innerHTML = '';
-
-    dividas.forEach(divida => {
-        const reembolsosDivida = reembolsos.filter(reembolso => reembolso.nome === divida.nome);
-        const totalReembolsado = reembolsosDivida.reduce((acc, reembolso) => acc + reembolso.valor, 0);
-
-        if (totalReembolsado >= divida.valorFinal) {
-            const li = document.createElement('li');
-            li.classList.add('item');
-            li.innerHTML = `
-                <span class="item-title" style="color: blue;">${divida.nome}: ${totalReembolsado} MT</span>
-                <span class="item-date">${new Date().toLocaleString()}</span>
-            `;
-            listaPago.appendChild(li);
-        } else {
-            const li = document.createElement('li');
-            li.classList.add('item');
-            li.innerHTML = `
-                <span class="item-title" style="color: red;">${divida.nome}: ${totalReembolsado} MT (Restante: ${(divida.valorFinal - totalReembolsado).toFixed(2)} MT)</span>
-                <span class="item-date">${new Date().toLocaleString()}</span>
-            `;
-            listaRemanescente.appendChild(li);
+        function toggleEmprestimoOptions() {
+            const tipo = document.getElementById("divida-tipo").value;
+            const options = document.getElementById("emprestimo-options");
+            if (tipo === "emprestimo") {
+                options.classList.remove("hidden");
+            } else {
+                options.classList.add("hidden");
+            }
         }
-    });
-}
 
-preencherOpcoesReembolso(); // Chamar ao carregar a página
+        function adicionarReceita() {
+            const tipo = document.getElementById("receita-tipo").value;
+            const valor = parseFloat(document.getElementById("receita-valor").value);
+            db.collection("receitas").add({ tipo, valor, timestamp: new Date() });
+        }
+
+        function adicionarDespesa() {
+            const nome = document.getElementById("despesa-nome").value;
+            const valor = parseFloat(document.getElementById("despesa-valor").value);
+            db.collection("despesas").add({ nome, valor, timestamp: new Date() });
+        }
+
+        function adicionarDivida() {
+            const tipo = document.getElementById("divida-tipo").value;
+            const nome = document.getElementById("divida-nome").value;
+            const valor = parseFloat(document.getElementById("divida-valor").value);
+            const percentual = tipo === "emprestimo" ? parseInt(document.getElementById("divida-percentual").value) : 0;
+            db.collection("dividas").add({ tipo, nome, valor, percentual, timestamp: new Date() });
+        }
+
+        function calcularReembolso() {
+            const nome = document.getElementById("reembolso-nome").value;
+            const valor = parseFloat(document.getElementById("reembolso-valor").value);
+            db.collection("reembolsos").add({ nome, valor, timestamp: new Date() });
+        }
+
+        function excluirTudo() {
+            const senha = document.getElementById("senha").value;
+            if (senha === "your_password") {
+                ["receitas", "despesas", "dividas", "reembolsos"].forEach(collection => {
+                    db.collection(collection).get().then(snapshot => {
+                        snapshot.forEach(doc => {
+                            db.collection(collection).doc(doc.id).delete();
+                        });
+                    });
+                });
+            } else {
+                alert("Senha incorreta!");
+            }
+        }
+
+        function atualizarResumo() {
+            let totalReceitas = 0;
+            let totalDespesas = 0;
+            let totalDividas = 0;
+            let totalReembolsos = 0;
+
+            db.collection("receitas").get().then(snapshot => {
+                snapshot.forEach(doc => totalReceitas += doc.data().valor);
+                document.getElementById("resumo-receitas").innerText = `Total de Receitas: ${totalReceitas.toFixed(2)} MT`;
+
+                db.collection("despesas").get().then(snapshot => {
+                    snapshot.forEach(doc => totalDespesas += doc.data().valor);
+                    document.getElementById("resumo-despesas").innerText = `Total de Despesas: ${totalDespesas.toFixed(2)} MT`;
+
+                    db.collection("dividas").get().then(snapshot => {
+                        snapshot.forEach(doc => totalDividas += doc.data().valor);
+                        document.getElementById("resumo-dividas").innerText = `Total de Dívidas: ${totalDividas.toFixed(2)} MT`;
+
+                        db.collection("reembolsos").get().then(snapshot => {
+                            snapshot.forEach(doc => totalReembolsos += doc.data().valor);
+                            document.getElementById("resumo-reembolsos").innerText = `Total de Reembolsos: ${totalReembolsos.toFixed(2)} MT`;
+
+                            const saldoDisponivel = totalReceitas - totalDespesas - totalDividas;
+                            document.getElementById("saldo-valor").innerText = `${saldoDisponivel.toFixed(2)} MT`;
+
+                            // Atualizar a cor do saldo disponível
+                            const saldoValorElement = document.getElementById("saldo-valor");
+                            saldoValorElement.classList.remove("green", "red", "grey");
+                            saldoValorElement.classList.add(saldoDisponivel >= 0 ? "green" : "red");
+                        });
+                    });
+                });
+            });
+        }
+
+        // Listener para atualizar os resumos em tempo real
+        db.collection("receitas").onSnapshot(atualizarResumo);
+        db.collection("despesas").onSnapshot(atualizarResumo);
+        db.collection("dividas").onSnapshot(atualizarResumo);
+        db.collection("reembolsos").onSnapshot(atualizarResumo);
 
     </script>
 </body>
