@@ -215,17 +215,19 @@
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-body">
-                <h2>Resumo</h2>
-                <p>Total de Juros: <span id="totalInterest">0 Mt</span></p>
-                <p>Total de Clientes Ativos: <span id="totalClients">0</span></p>
-                <p>Total de Receitas: <span id="totalIncome">0 Mt</span></p>
-                <p>Total de Dívidas Normais: <span id="totalNormalDebts">0 Mt</span></p>
-                <p>Total de Dívidas com Empréstimo: <span id="totalLoanDebts">0 Mt</span></p>
-                <p>Saldo Disponível: <span id="availableBalance">0 Mt</span></p>
-                 </div>
-        </div>
+      <div class="card">
+    <div class="card-body">
+        <h2>Resumo</h2>
+        <p>Total de Juros: <span id="totalInterest">0 Mt</span></p>
+        <p>Total de Clientes Ativos: <span id="totalClients">0</span></p>
+        <p>Total de Receitas: <span id="totalIncome">0 Mt</span></p>
+        <p>Total de Dívidas Normais: <span id="totalNormalDebts">0 Mt</span></p>
+        <p>Total de Dívidas com Empréstimo: <span id="totalLoanDebts">0 Mt</span></p>
+        <p>Saldo Disponível: <span id="availableBalance">0 Mt</span></p>
+        <p>Saldo Contabilístico: <span id="accountingBalance">0 Mt</span></p>
+    </div>
+</div>
+
 
         <div class="card">
             <div class="card-body">
@@ -405,41 +407,67 @@
     }
 
     // Atualizar Resumo
-    function updateSummary() {
-        database.ref().once('value', function(snapshot) {
-            var totalInterest = 0;
-            var totalClients = 0;
-            var totalIncome = 0;
-            var totalNormalDebts = 0;
-            var totalLoanDebts = 0;
-            var totalReimbursed = 0;
+// Atualizar Resumo
+function updateSummary() {
+    // Consultar o banco de dados Firebase uma vez para obter todos os dados necessários
+    database.ref().once('value', function(snapshot) {
+        // Variáveis para armazenar os totais calculados
+        let totalInterest = 0;
+        let totalClients = 0;
+        let totalIncome = 0;
+        let totalNormalDebts = 0;
+        let totalLoanDebts = 0;
+        let totalReimbursed = 0;
 
-            snapshot.child('debts').forEach(function(debtSnapshot) {
-                var debt = debtSnapshot.val();
-                totalReimbursed += debt.reimbursed || 0;
-                if (debt.type === 'normal') {
-                    totalNormalDebts += debt.value;
-                } else if (debt.type === 'emprestimo') {
-                    totalLoanDebts += debt.value;
-                    totalInterest += debt.value * (debt.interest / 100);
-                }
-            });
-
-            snapshot.child('incomes').forEach(function(incomeSnapshot) {
-                totalIncome += incomeSnapshot.val().value;
-            });
-
-            var clientSnapshotCount = snapshot.child('clients').numChildren();
-            totalClients = clientSnapshotCount === 0 ? 0 : clientSnapshotCount;
-
-            document.getElementById('totalInterest').textContent = totalInterest + ' Mt';
-            document.getElementById('totalClients').textContent = totalClients;
-            document.getElementById('totalIncome').textContent = totalIncome + ' Mt';
-            document.getElementById('totalNormalDebts').textContent = totalNormalDebts + ' Mt';
-            document.getElementById('totalLoanDebts').textContent = totalLoanDebts + ' Mt';
-            document.getElementById('availableBalance').textContent = (totalIncome - totalNormalDebts - totalLoanDebts + totalReimbursed) + ' Mt';
+        // Calculando o total de juros de todas as dívidas por empréstimo e somando outras informações
+        snapshot.child('debts').forEach(function(debtSnapshot) {
+            const debt = debtSnapshot.val();
+            totalReimbursed += debt.reimbursed || 0;
+            if (debt.type === 'normal') {
+                totalNormalDebts += debt.value; // Somar dívidas normais
+            } else if (debt.type === 'emprestimo') {
+                totalLoanDebts += debt.value; // Somar dívidas por empréstimo
+                totalInterest += debt.value * (debt.interest / 100); // Calcular juros de dívidas por empréstimo
+            }
         });
+
+        // Calculando o total de receita
+        snapshot.child('incomes').forEach(function(incomeSnapshot) {
+            totalIncome += incomeSnapshot.val().value;
+        });
+
+        // Contando o total de clientes
+        snapshot.child('clients').forEach(function(clientSnapshot) {
+            totalClients += 1;
+        });
+
+        // Calculando o saldo disponível
+        const availableBalance = totalIncome - totalNormalDebts - totalLoanDebts + totalReimbursed;
+
+        // Calculando o saldo contabilístico
+        const accountingBalance = availableBalance + totalInterest +  totalLoanDebts;
+
+        // Atualizando elementos HTML com os valores calculados e cores correspondentes
+        updateElementWithColor('totalInterest', `${totalInterest.toFixed(2)} Mt`, '#3498db'); // Azul para total de juros
+        updateElementWithColor('totalClients', totalClients.toString(), '#27ae60'); // Verde para total de clientes
+        updateElementWithColor('totalIncome', `${totalIncome.toFixed(2)} Mt`, '#f39c12'); // Laranja para total de receita
+        updateElementWithColor('totalNormalDebts', `${totalNormalDebts.toFixed(2)} Mt`, '#e74c3c'); // Vermelho para total de dívidas normais
+        updateElementWithColor('totalLoanDebts', `${totalLoanDebts.toFixed(2)} Mt`, '#9b59b6'); // Roxo para total de dívidas por empréstimo
+        updateElementWithColor('availableBalance', `${availableBalance.toFixed(2)} Mt`, '#2ecc71'); // Verde claro para saldo disponível
+        updateElementWithColor('accountingBalance', `${accountingBalance.toFixed(2)} Mt`, '#27ae60'); // Verde escuro para saldo contabilístico
+    });
+}
+
+// Função auxiliar para atualizar um elemento HTML com cor
+function updateElementWithColor(elementId, text, color) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.textContent = text;
+        element.style.color = color;
+    } else {
+        console.error(`Elemento com ID '${elementId}' não encontrado.`);
     }
+}
 
     // Atualizar Lista de Dívidas de Clientes
     function updateClientDebtList() {
@@ -521,12 +549,15 @@
 }
 
 
-    // Inicializar
+// Inicializar
+document.addEventListener('DOMContentLoaded', () => {
     updateSummary();
     updateClientDebtList();
+});
 
-    // Verificar juros a cada 24 horas
-    setInterval(applyInterestAfter30Days, 24 * 60 * 60 * 1000); // Verificar a cada 24 horas
+// Verificar juros a cada 24 horas
+setInterval(applyInterestAfter30Days, 24 * 60 * 60 * 1000); // Verificar a cada 24 horas
+
 </script>
 
 </body>
