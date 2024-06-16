@@ -7,80 +7,91 @@
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            font-family: 'Arial', sans-serif;
-        }
+       body {
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-image: linear-gradient(to bottom right, #e0e9ec, #f4f9fc);
+}
 
-        .container {
-            width: 100%;
-            max-width: 800px;
-            background-color: white;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
+.container {
+    width: 100%;
+    max-width: 900px;
+    background-color: #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    border-radius: 20px;
+    margin: 50px;
+}
 
-        .card {
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            transition: transform 0.2s;
-        }
+.card {
+    margin-bottom: 30px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease-out;
+    border-radius: 20px;
+    overflow: hidden;
+}
 
-        .card:hover {
-            transform: scale(1.02);
-        }
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
 
-        h1, h2 {
-            color: #333;
-        }
+button {
+    background-color: #ee0a0a;
+    color: white;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 18px;
+    transition: background-color 0.3s, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-transform: uppercase;
+    background-image: linear-gradient(to right, #45a049, #4CAF50);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
 
-        button {
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+button:hover {
+    background-color: #fa1101;
+    transform: scale(1.05);
+}
 
-        button:hover {
-            background-color: #0056b3;
-        }
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-transform: uppercase;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
 
-        .btn-delete {
-            background-color: red;
-            border: none;
-            color: white;
-            padding: 5px 10px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
+.btn-delete:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
+}
 
-        .confirm-box {
-            display: none;
-        }
+.list-group-item {
+    position: relative;
+    padding: 25px;
+    margin-bottom: 25px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease-out;
+}
 
-        .list-group-item.confirming .confirm-box {
-            display: block;
-        }
+.list-group-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
 
-        .list-group-item.confirming .btn-delete {
-            display: none;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .btn-block {
-            display: block;
-            width: 100%;
-        }
     </style>
 </head>
 <body>
@@ -100,7 +111,6 @@
                     <input type="number" class="form-control" id="incomeValue" placeholder="Valor (em Mt)">
                 </div>
                 <button class="btn btn-primary btn-block" onclick="addIncome()">Adicionar</button>
-               
             </div>
         </div>
 
@@ -114,7 +124,6 @@
                     <input type="number" class="form-control" id="expenseValue" placeholder="Valor (em Mt)">
                 </div>
                 <button class="btn btn-primary btn-block" onclick="addExpense()">Adicionar</button>
-                
             </div>
         </div>
 
@@ -144,7 +153,6 @@
                     </select>
                 </div>
                 <button class="btn btn-primary btn-block" onclick="addDebt()">Adicionar</button>
-
             </div>
         </div>
 
@@ -157,7 +165,7 @@
                 <div class="form-group">
                     <input type="number" class="form-control" id="reimbursementValue" placeholder="Valor Reembolsado (em Mt)">
                 </div>
-                <button class="btn btn-primary btn-block" onclick="addReimbursement()">Adicionar
+                <button class="btn btn-primary btn-block" onclick="addReimbursement()">Adicionar</button>
             </div>
         </div>
 
@@ -183,262 +191,298 @@
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script>
-        // Configuração do Firebase
-        const firebaseConfig = {
-  apiKey: "AIzaSyD8XOHaLCzNLDrIlHG3em4g4gyYIKTLWpQ",
-  authDomain: "xitique-61310.firebaseapp.com",
-  databaseURL: "https://xitique-61310-default-rtdb.firebaseio.com",
-  projectId: "xitique-61310",
-  storageBucket: "xitique-61310.appspot.com",
-  messagingSenderId: "331274991404",
-  appId: "1:331274991404:web:2fec0eb082d3fe0b33de89",
-  measurementId: "G-DFDMBKW1RK"
-};
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script>
+    // Configuração do Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyD8XOHaLCzNLDrIlHG3em4g4gyYIKTLWpQ",
+        authDomain: "xitique-61310.firebaseapp.com",
+        databaseURL: "https://xitique-61310-default-rtdb.firebaseio.com",
+        projectId: "xitique-61310",
+        storageBucket: "xitique-61310.appspot.com",
+        messagingSenderId: "331274991404",
+        appId: "1:331274991404:web:2fec0eb082d3fe0b33de89",
+        measurementId: "G-DFDMBKW1RK"
+    };
 
-        // Inicializar Firebase
-        firebase.initializeApp(firebaseConfig);
-        var database = firebase.database();
+    // Inicializar Firebase
+    firebase.initializeApp(firebaseConfig);
+    var database = firebase.database();
 
-        // Validar Entrada
-        function validateInput(value, errorMsg) {
-            if (isNaN(value) || value <= 0) {
-                alert(errorMsg);
-                return false;
-            }
-            return true;
+    // Validar Entrada
+    function validateInput(value, errorMsg) {
+        if (isNaN(value) || value <= 0) {
+            alert(errorMsg);
+            return false;
         }
+        return true;
+    }
 
-        // Adicionar Receita
-        function addIncome() {
-            var incomeType = document.getElementById('incomeType').value;
-            var incomeValue = parseFloat(document.getElementById('incomeValue').value);
+    // Função para obter data e hora atual no formato ISO
+    function getCurrentDateTime() {
+        return new Date().toISOString();
+    }
 
-            if (!validateInput(incomeValue, 'Por favor, insira um valor válido para a receita.')) return;
+    // Função para calcular a diferença de dias entre duas datas
+    function getDifferenceInDays(date1, date2) {
+        const diffInMs = Math.abs(new Date(date2) - new Date(date1));
+        return diffInMs / (1000 * 60 * 60 * 24);
+    }
 
-            var newIncomeKey = database.ref().child('incomes').push().key;
-            database.ref('incomes/' + newIncomeKey).set({
-                type: incomeType,
-                value: incomeValue,
-                date: new Date().toISOString()
-            });
-            document.getElementById('incomeType').value = 'salario';
-            document.getElementById('incomeValue').value = '';
-            updateSummary();
-        }
+    // Adicionar Receita
+    function addIncome() {
+        var incomeType = document.getElementById('incomeType').value;
+        var incomeValue = parseFloat(document.getElementById('incomeValue').value);
 
-        // Adicionar Despesa
-        function addExpense() {
-            var expenseName = document.getElementById('expenseName').value;
-            var expenseValue = parseFloat(document.getElementById('expenseValue').value);
+        if (!validateInput(incomeValue, 'Por favor, insira um valor válido para a receita.')) return;
 
-            if (expenseName === '' || !validateInput(expenseValue, 'Por favor, insira um valor válido para a despesa.')) return;
+        var newIncomeKey = database.ref().child('incomes').push().key;
+        database.ref('incomes/' + newIncomeKey).set({
+            type: incomeType,
+            value: incomeValue,
+            dateTime: getCurrentDateTime()
+        });
 
-            var newExpenseKey = database.ref().child('expenses').push().key;
-            database.ref('expenses/' + newExpenseKey).set({
-                name: expenseName,
-                value: expenseValue,
-                date: new Date().toISOString()
-            });
-            document.getElementById('expenseName').value = '';
-            document.getElementById('expenseValue').value = '';
-            updateSummary();
-        }
+        document.getElementById('incomeValue').value = '';
+        updateSummary();
+    }
 
-        // Mostrar/Ocultar Taxa de Juros
-        document.getElementById('debtType').addEventListener('change', function () {
-            var interestRates = document.getElementById('interestRates');
-            if (this.value === 'emprestimo') {
-                interestRates.style.display = 'block';
-            } else {
-                interestRates.style.display = 'none';
+    // Adicionar Despesa
+    function addExpense() {
+        var expenseName = document.getElementById('expenseName').value;
+        var expenseValue = parseFloat(document.getElementById('expenseValue').value);
+
+        if (expenseName.trim() === '' || !validateInput(expenseValue, 'Por favor, insira um valor válido para a despesa.')) return;
+
+        var newExpenseKey = database.ref().child('expenses').push().key;
+        database.ref('expenses/' + newExpenseKey).set({
+            name: expenseName,
+            value: expenseValue,
+            dateTime: getCurrentDateTime()
+        });
+
+        document.getElementById('expenseName').value = '';
+        document.getElementById('expenseValue').value = '';
+        updateSummary();
+    }
+
+    // Adicionar Dívida
+    function addDebt() {
+        var clientName = document.getElementById('clientName').value;
+        var debtType = document.getElementById('debtType').value;
+        var debtValue = parseFloat(document.getElementById('debtValue').value);
+        var interestRate = parseFloat(document.getElementById('interestRate').value);
+
+        if (clientName.trim() === '' || !validateInput(debtValue, 'Por favor, insira um valor válido para a dívida.')) return;
+
+        var interest = debtType === 'emprestimo' ? interestRate : 0;
+        var totalDebtValue = debtType === 'emprestimo' ? debtValue + (debtValue * (interest / 100)) : debtValue;
+
+        var newDebtKey = database.ref().child('debts').push().key;
+        database.ref('debts/' + newDebtKey).set({
+            client: clientName,
+            type: debtType,
+            value: debtValue,
+            interest: interest,
+            remaining: totalDebtValue,
+            reimbursed: 0,
+            dateTime: getCurrentDateTime()
+        });
+
+        // Adiciona cliente se não existir
+        var clientRef = database.ref('clients/' + clientName);
+        clientRef.once('value', function(snapshot) {
+            if (!snapshot.exists()) {
+                clientRef.set(true);
             }
         });
 
-        // Adicionar Dívida
-        function addDebt() {
-            var clientName = document.getElementById('clientName').value;
-            var debtType = document.getElementById('debtType').value;
-            var debtValue = parseFloat(document.getElementById('debtValue').value);
+        document.getElementById('clientName').value = '';
+        document.getElementById('debtValue').value = '';
+        document.getElementById('interestRates').style.display = 'none';
+        updateSummary();
+        updateClientDebtList();
+    }
 
-            if (clientName === '' || !validateInput(debtValue, 'Por favor, insira um valor válido para a dívida.')) return;
+    // Exibir taxas de juros apenas para dívidas com empréstimo
+    document.getElementById('debtType').addEventListener('change', function() {
+        var debtType = this.value;
+        document.getElementById('interestRates').style.display = debtType === 'emprestimo' ? 'block' : 'none';
+    });
 
-            var interestRate = debtType === 'emprestimo' ? parseFloat(document.getElementById('interestRate').value) : 0;
-            var totalToPay = debtValue + (debtValue * interestRate / 100);
-            var newDebtKey = database.ref().child('debts').push().key;
-            database.ref('debts/' + newDebtKey).set({
-                clientName: clientName,
-                type: debtType,
-                value: debtValue,
-                interestRate: interestRate,
-                totalToPay: totalToPay,
-                date: new Date().toISOString()
+    // Adicionar Reembolso
+    function addReimbursement() {
+        var client = document.getElementById('reimbursementClient').value;
+        var reimbursementValue = parseFloat(document.getElementById('reimbursementValue').value);
+
+        if (!validateInput(reimbursementValue, 'Por favor, insira um valor válido para o reembolso.')) return;
+
+        database.ref('debts').once('value', function(snapshot) {
+            snapshot.forEach(function(debtSnapshot) {
+                var debt = debtSnapshot.val();
+                if (debt.client === client) {
+                    var newReimbursed = (debt.reimbursed || 0) + reimbursementValue;
+                    var newRemaining = debt.remaining - reimbursementValue;
+
+                    // Recalcular o remanescente com os juros
+                    var remainingAfterReimbursement = newRemaining > 0 ? newRemaining + (newRemaining * (debt.interest / 100)) : 0;
+                    database.ref('debts/' + debtSnapshot.key).update({
+                        reimbursed: newReimbursed,
+                        remaining: remainingAfterReimbursement,
+                        dateTime: getCurrentDateTime()
+                    });
+                }
             });
-            document.getElementById('clientName').value = '';
-            document.getElementById('debtType').value = 'normal';
-            document.getElementById('debtValue').value = '';
-            document.getElementById('interestRates').style.display = 'none';
+            updateClientDebtList();
+        });
+
+        document.getElementById('reimbursementValue').value = '';
+        updateSummary();
+    }
+
+    // Função para aplicar juros após 30 dias
+    function applyInterestAfter30Days() {
+        database.ref('debts').once('value', function(snapshot) {
+            snapshot.forEach(function(debtSnapshot) {
+                var debt = debtSnapshot.val();
+                var daysSinceCreation = getDifferenceInDays(debt.dateTime, new Date());
+                if (daysSinceCreation >= 30 && debt.remaining > 0) {
+                    var newRemaining = debt.remaining + (debt.remaining * (debt.interest / 100));
+                    database.ref('debts/' + debtSnapshot.key).update({
+                        remaining: newRemaining,
+                        dateTime: getCurrentDateTime()
+                    });
+                }
+            });
             updateSummary();
-        }
+            updateClientDebtList();
+        });
+    }
 
-        // Adicionar Reembolso
-        function addReimbursement() {
-            var reimbursementClient = document.getElementById('reimbursementClient').value;
-            var reimbursementValue = parseFloat(document.getElementById('reimbursementValue').value);
+    // Atualizar Resumo
+    function updateSummary() {
+        database.ref().once('value', function(snapshot) {
+            var totalInterest = 0;
+            var totalClients = 0;
+            var totalIncome = 0;
+            var totalNormalDebts = 0;
+            var totalLoanDebts = 0;
+            var totalReimbursed = 0;
 
-            if (reimbursementClient === '' || !validateInput(reimbursementValue, 'Por favor, insira um valor válido para o reembolso.')) return;
-
-            var newReimbursementKey = database.ref().child('reimbursements').push().key;
-            database.ref('reimbursements/' + newReimbursementKey).set({
-                client: reimbursementClient,
-                value: reimbursementValue,
-                date: new Date().toISOString()
+            snapshot.child('debts').forEach(function(debtSnapshot) {
+                var debt = debtSnapshot.val();
+                totalReimbursed += debt.reimbursed || 0;
+                if (debt.type === 'normal') {
+                    totalNormalDebts += debt.value;
+                } else if (debt.type === 'emprestimo') {
+                    totalLoanDebts += debt.value;
+                    totalInterest += debt.value * (debt.interest / 100);
+                }
             });
-            document.getElementById('reimbursementClient').value = '';
-            document.getElementById('reimbursementValue').value = '';
-            updateSummary();
-        }
 
-        // Atualizar Resumo
-        function updateSummary() {
-            database.ref().once('value', function(snapshot) {
-                var incomes = snapshot.val().incomes || {};
-                var expenses = snapshot.val().expenses || {};
-                var debts = snapshot.val().debts || {};
-                var reimbursements = snapshot.val().reimbursements || {};
-
-                var totalIncome = 0;
-                for (var key in incomes) {
-                    totalIncome += incomes[key].value;
-                }
-
-                var totalExpenses = 0;
-                for (var key in expenses) {
-                    totalExpenses += expenses[key].value;
-                }
-
-                var totalNormalDebts = 0;
-                var totalLoanDebts = 0;
-                var totalInterest = 0;
-                var activeClients = {};
-                for (var key in debts) {
-                    var debt = debts[key];
-                    if (debt.type === 'normal') {
-                        totalNormalDebts += debt.value;
-                    } else {
-                        totalLoanDebts += debt.value;
-                        totalInterest += debt.value * debt.interestRate / 100;
-                    }
-                    activeClients[debt.clientName] = true;
-                }
-
-                var totalReimbursements = 0;
-                for (var key in reimbursements) {
-                    totalReimbursements += reimbursements[key].value;
-                }
-
-                var availableBalance = totalIncome - totalExpenses - totalNormalDebts - totalLoanDebts + totalReimbursements;
-
-                document.getElementById('totalIncome').innerText = totalIncome + ' Mt';
-                document.getElementById('totalNormalDebts').innerText = totalNormalDebts + ' Mt';
-                document.getElementById('totalLoanDebts').innerText = totalLoanDebts + ' Mt';
-                document.getElementById('totalInterest').innerText = totalInterest + ' Mt';
-                document.getElementById('totalClients').innerText = Object.keys(activeClients).length;
-                document.getElementById('availableBalance').innerText = availableBalance + ' Mt';
-
-                updateClientDebtList(debts);
+            snapshot.child('incomes').forEach(function(incomeSnapshot) {
+                totalIncome += incomeSnapshot.val().value;
             });
-        }
 
-        // Atualizar Lista de Dívidas de Clientes
-        function updateClientDebtList(debts) {
-            var clientDebtList = document.getElementById('clientDebtList');
-            clientDebtList.innerHTML = '';
-            for (var key in debts) {
-                var debt = debts[key];
+            var clientSnapshotCount = snapshot.child('clients').numChildren();
+            totalClients = clientSnapshotCount === 0 ? 0 : clientSnapshotCount;
+
+            document.getElementById('totalInterest').textContent = totalInterest + ' Mt';
+            document.getElementById('totalClients').textContent = totalClients;
+            document.getElementById('totalIncome').textContent = totalIncome + ' Mt';
+            document.getElementById('totalNormalDebts').textContent = totalNormalDebts + ' Mt';
+            document.getElementById('totalLoanDebts').textContent = totalLoanDebts + ' Mt';
+            document.getElementById('availableBalance').textContent = (totalIncome - totalNormalDebts - totalLoanDebts + totalReimbursed) + ' Mt';
+        });
+    }
+
+    // Atualizar Lista de Dívidas de Clientes
+    function updateClientDebtList() {
+        var clientDebtList = document.getElementById('clientDebtList');
+        clientDebtList.innerHTML = '';
+
+        database.ref('debts').once('value', function(snapshot) {
+            snapshot.forEach(function(debtSnapshot) {
+                var debt = debtSnapshot.val();
                 var listItem = document.createElement('li');
                 listItem.className = 'list-group-item';
+                listItem.setAttribute('data-key', debtSnapshot.key);
+                var totalDebtWithInterest = debt.type === 'emprestimo' ? debt.value + (debt.value * (debt.interest / 100)) : debt.value;
+                var statusText = debt.remaining <= 0 
+                    ? '<span class="badge badge-success">Pago</span>' 
+                    : `<span class="badge badge-warning">Pagou ${debt.reimbursed} Mt, Remanescente: ${debt.remaining} Mt (Incluindo Juros)</span>`;
                 listItem.innerHTML = `
-                    <strong>Cliente:</strong> ${debt.clientName}<br>
-                    <strong>Valor Devido:</strong> ${debt.value} Mt<br>
-                    <strong>Juros:</strong> ${debt.interestRate}%<br>
-                    <strong>Total a Pagar:</strong> ${debt.totalToPay} Mt<br>
-                    <strong>Data:</strong> ${new Date(debt.date).toLocaleString()}<br>
-                    <button class="btn-delete" onclick="confirmDelete('${key}')">Excluir</button>
-                    <div class="confirm-box">
-                        <button class="btn-confirm" onclick="deleteDebt('${key}')">Sim</button>
-                        <button class="btn-delete" onclick="cancelDelete('${key}')">Não</button>
+                    <div>
+                        <strong>Cliente:</strong> ${debt.client} <br>
+                        <strong>Tipo:</strong> ${debt.type === 'normal' ? 'Dívida Normal' : 'Dívida com Empréstimo'} <br>
+                        <strong>Valor:</strong> ${debt.value} Mt <br>
+                        ${debt.type === 'emprestimo' ? `<strong>Juros:</strong> ${debt.interest}%` : ''}
+                        <br>
+                        <strong>Valor Total com Juros:</strong> ${totalDebtWithInterest} Mt <br>
+                        <strong>Status:</strong> ${statusText} <br>
+                        <strong>Data e Hora:</strong> ${debt.dateTime} <br>
+                        <button class="btn btn-danger btn-sm mt-2" onclick="confirmDeleteDebt('${debtSnapshot.key}')">Excluir</button>
                     </div>
                 `;
                 clientDebtList.appendChild(listItem);
-            }
-            updateReimbursementClients();
-        }
-
-        // Atualizar Lista de Clientes para Reembolsos
-        function updateReimbursementClients() {
-            var reimbursementClientSelect = document.getElementById('reimbursementClient');
-            reimbursementClientSelect.innerHTML = '';
-            database.ref('debts').once('value', function(snapshot) {
-                var debts = snapshot.val() || {};
-                var clientNames = [];
-                for (var key in debts) {
-                    var debt = debts[key];
-                    if (!clientNames.includes(debt.clientName)) {
-                        clientNames.push(debt.clientName);
-                    }
-                }
-                clientNames.forEach(function(clientName) {
-                    var option = document.createElement('option');
-                    option.value = clientName;
-                    option.innerText = clientName;
-                    reimbursementClientSelect.appendChild(option);
-                });
             });
-        }
+        });
 
-        // Confirmar Exclusão
-        function confirmDelete(key) {
-            var listItem = document.querySelector(`button[onclick="confirmDelete('${key}')"]`).parentElement;
-            listItem.classList.add('confirming');
-        }
+        // Atualizar lista de clientes no campo de reembolso
+        var reimbursementClient = document.getElementById('reimbursementClient');
+        reimbursementClient.innerHTML = '';
 
-        // Cancelar Exclusão
-        function cancelDelete(key) {
-            var listItem = document.querySelector(`button[onclick="confirmDelete('${key}')"]`).parentElement;
-            listItem.classList.remove('confirming');
-        }
+        database.ref('clients').once('value', function(snapshot) {
+            snapshot.forEach(function(clientSnapshot) {
+                var option = document.createElement('option');
+                option.value = clientSnapshot.key;
+                option.textContent = clientSnapshot.key;
+                reimbursementClient.appendChild(option);
+            });
+        });
+    }
 
-        // Excluir Dívida
-        function deleteDebt(key) {
-            database.ref('debts/' + key).remove().then(updateSummary);
+    // Confirmar Exclusão de Dívida
+    function confirmDeleteDebt(debtKey) {
+        var confirmation = confirm('Tem certeza de que deseja excluir esta dívida?');
+        if (confirmation) {
+            deleteDebt(debtKey);
         }
+    }
 
-        // Limpar Dados Específicos
-        function confirmClear(type) {
-            var confirmation = confirm('Você tem certeza que deseja excluir todos os itens desta seção?');
-            if (confirmation) {
-                database.ref(type).set(null).then(updateSummary);
-            }
-        }
-
-        // Limpar Todo o Histórico
-        function promptPassword() {
-            var password = prompt('Digite a senha para limpar todo o histórico:');
-            if (password === '123') {
-                clearAllData();
-            } else {
-                alert('Senha incorreta.');
-            }
-        }
-
-        function clearAllData() {
-            database.ref().set(null).then(updateSummary);
-        }
-
-        // Atualizar resumo inicial ao carregar a página
+    // Excluir Dívida
+    function deleteDebt(debtKey) {
+        database.ref('debts/' + debtKey).remove();
         updateSummary();
-    </script>
+        updateClientDebtList();
+    }
+
+    // Limpar Todos os Dados
+    function clearAllData() {
+    var password = prompt('Digite a senha para limpar todos os dados:');
+    if (password === 'suaSenhaSecreta') {
+        database.ref().remove()
+            .then(function() {
+                updateSummary();
+                updateClientDebtList();
+                alert('Todos os dados foram limpos com sucesso.');
+            })
+            .catch(function(error) {
+                alert('Erro ao limpar os dados: ' + error.message);
+            });
+    } else {
+        alert('Senha incorreta!');
+    }
+}
+
+
+    // Inicializar
+    updateSummary();
+    updateClientDebtList();
+
+    // Verificar juros a cada 24 horas
+    setInterval(applyInterestAfter30Days, 24 * 60 * 60 * 1000); // Verificar a cada 24 horas
+</script>
+
 </body>
 </html>
