@@ -8,90 +8,147 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
        body {
-    background-color: #f0f2f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    font-family: 'Arial', sans-serif;
-    background-image: linear-gradient(to bottom right, #e0e9ec, #f4f9fc);
-}
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f5;
+            margin: 0;
+            padding: 0;
+        }
 
-.container {
-    width: 100%;
-    max-width: 900px;
-    background-color: #ffffff;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    padding: 40px;
-    border-radius: 20px;
-    margin: 50px;
-}
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-.card {
-    margin-bottom: 30px;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease-out;
-    border-radius: 20px;
-    overflow: hidden;
-}
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
 
-.card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
 
-button {
-    background-color: #ee0a0a;
-    color: white;
-    cursor: pointer;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 24px;
-    font-size: 18px;
-    transition: background-color 0.3s, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    text-transform: uppercase;
-    background-image: linear-gradient(to right, #45a049, #4CAF50);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
+        input, select, button {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
 
-button:hover {
-    background-color: #fa1101;
-    transform: scale(1.05);
-}
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-.btn-delete {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 20px;
-    font-size: 16px;
-    transition: background-color 0.3s, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    text-transform: uppercase;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
+        button:hover {
+            background-color: #0056b3;
+        }
 
-.btn-delete:hover {
-    background-color: #c82333;
-    transform: scale(1.05);
-}
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
 
-.list-group-item {
-    position: relative;
-    padding: 25px;
-    margin-bottom: 25px;
-    background-color: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease-out;
-}
+        .card.receitas {
+            border-left: 5px solid #28a745; /* Verde */
+        }
 
-.list-group-item:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-}
+        .card.despesas {
+            border-left: 5px solid #dc3545; /* Vermelho */
+        }
 
+        .card.dividas {
+            border-left: 5px solid #ffc107; /* Amarelo */
+        }
+
+        .card.reembolsos {
+            border-left: 5px solid #007bff; /* Azul */
+        }
+
+        .card.saldo {
+            border-left: 5px solid #6c757d; /* Cinza */
+        }
+
+        .saldo-valor {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .saldo-valor.red {
+            color: red;
+        }
+
+        .saldo-valor.green {
+            color: green;
+        }
+
+        .saldo-valor.yellow {
+            color: #ffc107;
+        }
+
+        .saldo-valor.blue {
+            color: #007bff;
+        }
+
+        .saldo-valor.grey {
+            color: #6c757d;
+        }
+
+        .item-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .item {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            position: relative;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        .item-title {
+            font-weight: bold;
+        }
+
+        .item-date {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .delete-button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 5px 10px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -114,18 +171,7 @@ button:hover {
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-body">
-                <h2>Despesas</h2>
-                <div class="form-group">
-                    <input type="text" class="form-control" id="expenseName" placeholder="Nome da Despesa">
-                </div>
-                <div class="form-group">
-                    <input type="number" class="form-control" id="expenseValue" placeholder="Valor (em Mt)">
-                </div>
-                <button class="btn btn-primary btn-block" onclick="addExpense()">Adicionar</button>
-            </div>
-        </div>
+        
 
         <div class="card">
             <div class="card-body">
@@ -178,8 +224,7 @@ button:hover {
                 <p>Total de Dívidas Normais: <span id="totalNormalDebts">0 Mt</span></p>
                 <p>Total de Dívidas com Empréstimo: <span id="totalLoanDebts">0 Mt</span></p>
                 <p>Saldo Disponível: <span id="availableBalance">0 Mt</span></p>
-                <button class="btn btn-danger btn-block" onclick="promptPassword()">Limpar Todo o Histórico</button>
-            </div>
+                 </div>
         </div>
 
         <div class="card">
