@@ -3,552 +3,442 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle Financeiro</title>
+    <title>Sistema de Gestão Financeira</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f5;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             margin: 0;
-            padding: 0;
+            font-family: 'Arial', sans-serif;
         }
-.pago {
-    color: #28a745; /* Verde vivo */
-    font-weight: bold;
-}
-
-.remanescente {
-    color: #dc3545; /* Vermelho vivo */
-    font-weight: bold;
-}
-
-.lista-pago {
-    border-left: 5px solid #28a745;
-}
-
-.lista-remanescente {
-    border-left: 5px solid #dc3545;
-}
 
         .container {
+            width: 100%;
             max-width: 800px;
-            margin: 20px auto;
+            background-color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
         }
 
         h1, h2 {
-            text-align: center;
             color: #333;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
-        }
-
-        input, select, button {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
         }
 
         button {
             background-color: #007bff;
             color: white;
-            border: none;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s;
         }
 
         button:hover {
             background-color: #0056b3;
         }
 
-        .card {
-            background-color: #fff;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .card.receitas {
-            border-left: 5px solid #28a745; /* Verde */
-        }
-
-        .card.despesas {
-            border-left: 5px solid #dc3545; /* Vermelho */
-        }
-
-        .card.dividas {
-            border-left: 5px solid #ffc107; /* Amarelo */
-        }
-
-        .card.reembolsos {
-            border-left: 5px solid #007bff; /* Azul */
-        }
-
-        .card.saldo {
-            border-left: 5px solid #6c757d; /* Cinza */
-        }
-
-        .saldo-valor {
-            font-size: 22px;
-            font-weight: bold;
-        }
-
-        .saldo-valor.red {
-            color: red;
-        }
-
-        .saldo-valor.green {
-            color: green;
-        }
-
-        .saldo-valor.yellow {
-            color: #ffc107;
-        }
-
-        .saldo-valor.blue {
-            color: #007bff;
-        }
-
-        .saldo-valor.grey {
-            color: #6c757d;
-        }
-
-        .item-list {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .item {
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-            position: relative;
-        }
-
-        .item:last-child {
-            border-bottom: none;
-        }
-
-        .item-title {
-            font-weight: bold;
-        }
-
-        .item-date {
-            font-size: 0.9em;
-            color: #555;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .delete-button {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
+        .btn-delete {
             background-color: red;
-            color: white;
             border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            color: white;
             padding: 5px 10px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .confirm-box {
             display: none;
+        }
+
+        .list-group-item.confirming .confirm-box {
+            display: block;
+        }
+
+        .list-group-item.confirming .btn-delete {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Controle Financeiro</h1>
-
-        <div class="card receitas">
-            <h2>Adicionar Receita</h2>
-            <label for="receita-tipo">Tipo</label>
-            <input type="text" id="receita-tipo">
-            <label for="receita-valor">Valor</label>
-            <input type="number" id="receita-valor">
-            <button onclick="adicionarReceita()">Adicionar Receita</button>
-        </div>
-
-        <div class="card despesas">
-            <h2>Adicionar Despesa</h2>
-            <label for="despesa-nome">Nome</label>
-            <input type="text" id="despesa-nome">
-            <label for="despesa-valor">Valor</label>
-            <input type="number" id="despesa-valor">
-            <button onclick="adicionarDespesa()">Adicionar Despesa</button>
-        </div>
-
-        <div class="card dividas">
-            <h2>Adicionar Dívida</h2>
-            <label for="divida-tipo">Tipo</label>
-            <select id="divida-tipo" onchange="toggleEmprestimoOptions()">
-                <option value="normal">Normal</option>
-                <option value="emprestimo">Empréstimo</option>
-            </select>
-            <label for="divida-nome">Nome</label>
-            <input type="text" id="divida-nome">
-            <label for="divida-valor">Valor</label>
-            <input type="number" id="divida-valor">
-            <div id="emprestimo-options" class="hidden">
-                <label for="divida-percentual">Percentual</label>
-                <select id="divida-percentual">
-                    <option value="20">20%</option>
-                    <option value="25">25%</option>
-                    <option value="30">30%</option>
-                    <option value="35">35%</option>
-                    <option value="40">40%</option>
-                </select>
-            </div>
-            <button onclick="adicionarDivida()">Adicionar Dívida</button>
-        </div>
-
-        <div class="card reembolsos">
-            <h2>Calcular Reembolso</h2>
-            <label for="reembolso-nome">Nome da Dívida</label>
-            <select id="reembolso-nome"></select>
-            <label for="reembolso-valor">Valor</label>
-            <input type="number" id="reembolso-valor">
-            <button onclick="calcularReembolso()">Calcular Reembolso</button>
-        </div>
-
-        <div class="card saldo">
-            <h2>Resumo</h2>
-            <div class="resumo" id="resumo">
-                <p id="resumo-receitas">Total de Receitas: 0 MT</p>
-                <p id="resumo-despesas">Total de Despesas: 0 MT</p>
-                <p id="resumo-dividas">Total de Dívidas: 0 MT</p>
-                <p id="resumo-reembolsos">Total de Reembolsos: 0 MT</p>
-                <p id="saldo-disponivel">Saldo Disponível: <span id="saldo-valor" class="saldo-valor grey">0 MT</span></p>
-            </div>
-        </div>
-
-        <div class="card receitas">
-            <h3>Receitas</h3>
-            <ul id="lista-receitas" class="item-list"></ul>
-        </div>
-        
-        <div class="card despesas">
-            <h3>Despesas</h3>
-            <ul id="lista-despesas" class="item-list"></ul>
-        </div>
-        
-        <div class="card dividas">
-            <h3>Dívidas</h3>
-            <ul id="lista-dividas" class="item-list"></ul>
-        </div>
-
-        <div class="card reembolsos">
-            <h3>Reembolsos</h3>
-            <ul id="lista-reembolsos" class="item-list"></ul>
-        </div>
-        <div class="card lista-pago">
-    <h3>Pagos</h3>
-    <ul id="lista-pago" class="item-list"></ul>
-</div>
-
-<div class="card lista-remanescente">
-    <h3>Remanescentes</h3>
-    <ul id="lista-remanescente" class="item-list"></ul>
-</div>
-
+        <h1 class="text-center">Sistema de Gestão Financeira</h1>
 
         <div class="card">
-            <h2>Excluir Tudo</h2>
-            <label for="senha">Senha</label>
-            <input type="password" id="senha">
-            <button onclick="excluirTudo()">Excluir Tudo</button>
+            <div class="card-body">
+                <h2>Receitas</h2>
+                <div class="form-group">
+                    <select class="form-control" id="incomeType">
+                        <option value="salario">Salário</option>
+                        <option value="rendaExtra">Renda Extra</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="number" class="form-control" id="incomeValue" placeholder="Valor (em Mt)">
+                </div>
+                <button class="btn btn-primary btn-block" onclick="addIncome()">Adicionar</button>
+               
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h2>Despesas</h2>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="expenseName" placeholder="Nome da Despesa">
+                </div>
+                <div class="form-group">
+                    <input type="number" class="form-control" id="expenseValue" placeholder="Valor (em Mt)">
+                </div>
+                <button class="btn btn-primary btn-block" onclick="addExpense()">Adicionar</button>
+                
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h2>Dívidas</h2>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="clientName" placeholder="Nome do Cliente">
+                </div>
+                <div class="form-group">
+                    <select class="form-control" id="debtType">
+                        <option value="normal">Dívida Normal</option>
+                        <option value="emprestimo">Dívida com Empréstimo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="number" class="form-control" id="debtValue" placeholder="Valor (em Mt)">
+                </div>
+                <div id="interestRates" class="form-group" style="display:none;">
+                    <label for="interestRate">Taxa de Juros:</label>
+                    <select class="form-control" id="interestRate">
+                        <option value="20">20%</option>
+                        <option value="25">25%</option>
+                        <option value="30">30%</option>
+                        <option value="35">35%</option>
+                        <option value="40">40%</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary btn-block" onclick="addDebt()">Adicionar</button>
+
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h2>Reembolsos</h2>
+                <div class="form-group">
+                    <select class="form-control" id="reimbursementClient"></select>
+                </div>
+                <div class="form-group">
+                    <input type="number" class="form-control" id="reimbursementValue" placeholder="Valor Reembolsado (em Mt)">
+                </div>
+                <button class="btn btn-primary btn-block" onclick="addReimbursement()">Adicionar
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h2>Resumo</h2>
+                <p>Total de Juros: <span id="totalInterest">0 Mt</span></p>
+                <p>Total de Clientes Ativos: <span id="totalClients">0</span></p>
+                <p>Total de Receitas: <span id="totalIncome">0 Mt</span></p>
+                <p>Total de Dívidas Normais: <span id="totalNormalDebts">0 Mt</span></p>
+                <p>Total de Dívidas com Empréstimo: <span id="totalLoanDebts">0 Mt</span></p>
+                <p>Saldo Disponível: <span id="availableBalance">0 Mt</span></p>
+                <button class="btn btn-danger btn-block" onclick="promptPassword()">Limpar Todo o Histórico</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h2>Clientes e Dívidas</h2>
+                <ul id="clientDebtList" class="list-group"></ul>
+            </div>
         </div>
     </div>
-    
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
         // Configuração do Firebase
-        // Configuração do Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyD8XOHaLCzNLDrIlHG3em4g4gyYIKTLWpQ",
-    authDomain: "xitique-61310.firebaseapp.com",
-    databaseURL: "https://xitique-61310-default-rtdb.firebaseio.com",
-    projectId: "xitique-61310",
-    storageBucket: "xitique-61310.appspot.com",
-    messagingSenderId: "331274991404",
-    appId: "1:331274991404:web:2fec0eb082d3fe0b33de89",
-    measurementId: "G-DFDMBKW1RK"
+        const firebaseConfig = {
+  apiKey: "AIzaSyD8XOHaLCzNLDrIlHG3em4g4gyYIKTLWpQ",
+  authDomain: "xitique-61310.firebaseapp.com",
+  databaseURL: "https://xitique-61310-default-rtdb.firebaseio.com",
+  projectId: "xitique-61310",
+  storageBucket: "xitique-61310.appspot.com",
+  messagingSenderId: "331274991404",
+  appId: "1:331274991404:web:2fec0eb082d3fe0b33de89",
+  measurementId: "G-DFDMBKW1RK"
 };
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
 
-let receitas = [];
-let despesas = [];
-let dividas = [];
-let reembolsos = [];
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        var database = firebase.database();
 
-function toggleEmprestimoOptions() {
-    const tipo = document.getElementById('divida-tipo').value;
-    const emprestimoOptions = document.getElementById('emprestimo-options');
-    emprestimoOptions.style.display = tipo === 'emprestimo' ? 'block' : 'none';
-}
-
-// Adicionar receita
-function adicionarReceita() {
-    const tipo = document.getElementById('receita-tipo').value;
-    const valor = parseFloat(document.getElementById('receita-valor').value);
-    const data = new Date();
-
-    if (tipo.trim() === '' || isNaN(valor) || valor <= 0) {
-        alert('Por favor, preencha todos os campos corretamente.');
-        return;
-    }
-
-    const receita = { tipo, valor, data };
-    db.collection('receitas').add(receita);
-    document.getElementById('receita-tipo').value = '';
-    document.getElementById('receita-valor').value = '';
-}
-
-// Adicionar despesa
-function adicionarDespesa() {
-    const nome = document.getElementById('despesa-nome').value;
-    const valor = parseFloat(document.getElementById('despesa-valor').value);
-    const data = new Date();
-
-    if (isNaN(valor) || valor <= 0) {
-        alert('Por favor, preencha todos os campos corretamente.');
-        return;
-    }
-
-    const despesa = { nome, valor, data };
-    db.collection('despesas').add(despesa);
-    document.getElementById('despesa-nome').value = '';
-    document.getElementById('despesa-valor').value = '';
-}
-
-// Adicionar dívida
-function adicionarDivida() {
-    const tipo = document.getElementById('divida-tipo').value;
-    const nome = document.getElementById('divida-nome').value;
-    const valor = parseFloat(document.getElementById('divida-valor').value);
-    const percentual = tipo === 'emprestimo' ? parseInt(document.getElementById('divida-percentual').value) : 0;
-    const valorFinal = tipo === 'emprestimo' ? valor + (valor * (percentual / 100)) : valor;
-    const data = new Date();
-
-    if (isNaN(valor) || valor <= 0) {
-        alert('Por favor, preencha todos os campos corretamente.');
-        return;
-    }
-
-    const divida = { tipo, nome, valor, valorFinal, percentual, data };
-    db.collection('dividas').add(divida);
-    document.getElementById('divida-tipo').value = 'normal';
-    document.getElementById('divida-nome').value = '';
-    document.getElementById('divida-valor').value = '';
-    document.getElementById('divida-percentual').value = '20';
-    toggleEmprestimoOptions();
-}
-
-// Calcular reembolso
-function calcularReembolso() {
-    const nome = document.getElementById('reembolso-nome').value;
-    const valor = parseFloat(document.getElementById('reembolso-valor').value);
-    const data = new Date();
-
-    if (isNaN(valor) || valor <= 0) {
-        alert('Por favor, preencha todos os campos corretamente.');
-        return;
-    }
-
-    const reembolso = { nome, valor, data };
-    db.collection('reembolsos').add(reembolso);
-    document.getElementById('reembolso-valor').value = '';
-}
-
-// Excluir tudo
-function excluirTudo() {
-    const senha = document.getElementById('senha').value;
-    if (senha !== 'bin') {
-        alert('Senha incorreta!');
-        return;
-    }
-
-    const collections = ['receitas', 'despesas', 'dividas', 'reembolsos'];
-    collections.forEach(collection => {
-        db.collection(collection).get().then(querySnapshot => {
-            querySnapshot.forEach(doc => {
-                doc.ref.delete();
-            });
-        });
-    });
-    document.getElementById('senha').value = '';
-}
-
-// Atualizar resumo
-function atualizarResumo() {
-    const totalReceitas = receitas.reduce((acc, receita) => acc + receita.valor, 0);
-    const totalDespesas = despesas.reduce((acc, despesa) => acc + despesa.valor, 0);
-    const totalDividas = dividas.reduce((acc, divida) => acc + divida.valor, 0);
-    const totalReembolsos = reembolsos.reduce((acc, reembolso) => acc + reembolso.valor, 0);
-    const saldoDisponivel = totalReceitas - totalDividas - totalDespesas - totalReembolsos;
-
-    document.getElementById('resumo-receitas').innerText = `Total de Receitas: ${totalReceitas.toFixed(2)} MT`;
-    document.getElementById('resumo-despesas').innerText = `Total de Despesas: ${totalDespesas.toFixed(2)} MT`;
-    document.getElementById('resumo-dividas').innerText = `Total de Dívidas: ${totalDividas.toFixed(2)} MT`;
-    document.getElementById('resumo-reembolsos').innerText = `Total de Reembolsos: ${totalReembolsos.toFixed(2)} MT`;
-
-    const saldoValorEl = document.getElementById('saldo-valor');
-    saldoValorEl.innerText = `${saldoDisponivel.toFixed(2)} MT`;
-    saldoValorEl.className = 'saldo-valor ' + (saldoDisponivel >= 5000 ? 'green' : 'red');
-
-    atualizarStatusReembolsos();
-}
-
-// Listener para atualizações em tempo real
-db.collection('receitas').onSnapshot(querySnapshot => {
-    receitas = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-    const listaReceitas = document.getElementById('lista-receitas');
-    listaReceitas.innerHTML = '';
-    receitas.forEach((receita) => {
-        const li = document.createElement('li');
-        li.classList.add('item');
-        li.innerHTML = `
-            <span class="item-title">${receita.tipo}: ${receita.valor} MT</span>
-            <span class="item-date">${new Date(receita.data.seconds * 1000).toLocaleString()}</span>
-            <button class="delete-button" onclick="excluirItem('receitas', '${receita.id}')">Excluir</button>
-        `;
-        li.addEventListener('dblclick', () => {
-            const deleteButton = li.querySelector('.delete-button');
-            deleteButton.style.display = deleteButton.style.display === 'none' ? 'block' : 'none';
-        });
-        listaReceitas.appendChild(li);
-    });
-    atualizarResumo();
-});
-
-db.collection('despesas').onSnapshot(querySnapshot => {
-    despesas = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-    const listaDespesas = document.getElementById('lista-despesas');
-    listaDespesas.innerHTML = '';
-    despesas.forEach((despesa) => {
-        const li = document.createElement('li');
-        li.classList.add('item');
-        li.innerHTML = `
-            <span class="item-title">${despesa.nome}: ${despesa.valor} MT</span>
-            <span class="item-date">${new Date(despesa.data.seconds * 1000).toLocaleString()}</span>
-            <button class="delete-button" onclick="excluirItem('despesas', '${despesa.id}')">Excluir</button>
-        `;
-        li.addEventListener('dblclick', () => {
-            const deleteButton = li.querySelector('.delete-button');
-            deleteButton.style.display = deleteButton.style.display === 'none' ? 'block' : 'none';
-        });
-        listaDespesas.appendChild(li);
-    });
-    atualizarResumo();
-});
-
-db.collection('dividas').onSnapshot(querySnapshot => {
-    dividas = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-    const listaDividas = document.getElementById('lista-dividas');
-    listaDividas.innerHTML = '';
-    dividas.forEach((divida) => {
-        const li = document.createElement('li');
-        li.classList.add('item');
-        li.innerHTML = `
-            <span class="item-title">${divida.nome}: ${divida.valor} MT (Final: ${divida.valorFinal} MT)</span>
-            <span class="item-date">${new Date(divida.data.seconds * 1000).toLocaleString()}</span>
-            <button class="delete-button" onclick="excluirItem('dividas', '${divida.id}')">Excluir</button>
-        `;
-        li.addEventListener('dblclick', () => {
-            const deleteButton = li.querySelector('.delete-button');
-            deleteButton.style.display = deleteButton.style.display === 'none' ? 'block' : 'none';
-        });
-        listaDividas.appendChild(li);
-    });
-    atualizarResumo();
-    preencherOpcoesReembolso();
-});
-
-db.collection('reembolsos').onSnapshot(querySnapshot => {
-    reembolsos = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-    const listaReembolsos = document.getElementById('lista-reembolsos');
-    listaReembolsos.innerHTML = '';
-    reembolsos.forEach((reembolso) => {
-        const li = document.createElement('li');
-        li.classList.add('item');
-        li.innerHTML = `
-            <span class="item-title">${reembolso.nome}: ${reembolso.valor} MT</span>
-            <span class="item-date">${new Date(reembolso.data.seconds * 1000).toLocaleString()}</span>
-            <button class="delete-button" onclick="excluirItem('reembolsos', '${reembolso.id}')">Excluir</button>
-        `;
-        li.addEventListener('dblclick', () => {
-            const deleteButton = li.querySelector('.delete-button');
-            deleteButton.style.display = deleteButton.style.display === 'none' ? 'block' : 'none';
-        });
-        listaReembolsos.appendChild(li);
-    });
-    atualizarResumo();
-});
-
-// Excluir item
-function excluirItem(collection, id) {
-    db.collection(collection).doc(id).delete();
-}
-
-// Preencher opções de reembolso
-function preencherOpcoesReembolso() {
-    const selectReembolsoNome = document.getElementById('reembolso-nome');
-    selectReembolsoNome.innerHTML = ''; // Limpa as opções atuais
-
-    dividas.forEach((divida) => {
-        const option = document.createElement('option');
-        option.value = divida.nome;
-        option.text = divida.nome;
-        selectReembolsoNome.appendChild(option);
-    });
-}
-
-// Atualizar status dos reembolsos
-function atualizarStatusReembolsos() {
-    const listaPago = document.getElementById('lista-pago');
-    const listaRemanescente = document.getElementById('lista-remanescente');
-    listaPago.innerHTML = '';
-    listaRemanescente.innerHTML = '';
-
-    dividas.forEach(divida => {
-        const reembolsosDivida = reembolsos.filter(reembolso => reembolso.nome === divida.nome);
-        const totalReembolsado = reembolsosDivida.reduce((acc, reembolso) => acc + reembolso.valor, 0);
-
-        if (totalReembolsado >= divida.valorFinal) {
-            const li = document.createElement('li');
-            li.classList.add('item');
-            li.innerHTML = `
-                <span class="item-title" style="color: blue;">${divida.nome}: ${totalReembolsado} MT</span>
-                <span class="item-date">${new Date().toLocaleString()}</span>
-            `;
-            listaPago.appendChild(li);
-        } else {
-            const li = document.createElement('li');
-            li.classList.add('item');
-            li.innerHTML = `
-                <span class="item-title" style="color: red;">${divida.nome}: ${totalReembolsado} MT (Restante: ${(divida.valorFinal - totalReembolsado).toFixed(2)} MT)</span>
-                <span class="item-date">${new Date().toLocaleString()}</span>
-            `;
-            listaRemanescente.appendChild(li);
+        // Validar Entrada
+        function validateInput(value, errorMsg) {
+            if (isNaN(value) || value <= 0) {
+                alert(errorMsg);
+                return false;
+            }
+            return true;
         }
-    });
-}
 
-preencherOpcoesReembolso(); // Chamar ao carregar a página
+        // Adicionar Receita
+        function addIncome() {
+            var incomeType = document.getElementById('incomeType').value;
+            var incomeValue = parseFloat(document.getElementById('incomeValue').value);
 
+            if (!validateInput(incomeValue, 'Por favor, insira um valor válido para a receita.')) return;
+
+            var newIncomeKey = database.ref().child('incomes').push().key;
+            database.ref('incomes/' + newIncomeKey).set({
+                type: incomeType,
+                value: incomeValue,
+                date: new Date().toISOString()
+            });
+            document.getElementById('incomeType').value = 'salario';
+            document.getElementById('incomeValue').value = '';
+            updateSummary();
+        }
+
+        // Adicionar Despesa
+        function addExpense() {
+            var expenseName = document.getElementById('expenseName').value;
+            var expenseValue = parseFloat(document.getElementById('expenseValue').value);
+
+            if (expenseName === '' || !validateInput(expenseValue, 'Por favor, insira um valor válido para a despesa.')) return;
+
+            var newExpenseKey = database.ref().child('expenses').push().key;
+            database.ref('expenses/' + newExpenseKey).set({
+                name: expenseName,
+                value: expenseValue,
+                date: new Date().toISOString()
+            });
+            document.getElementById('expenseName').value = '';
+            document.getElementById('expenseValue').value = '';
+            updateSummary();
+        }
+
+        // Mostrar/Ocultar Taxa de Juros
+        document.getElementById('debtType').addEventListener('change', function () {
+            var interestRates = document.getElementById('interestRates');
+            if (this.value === 'emprestimo') {
+                interestRates.style.display = 'block';
+            } else {
+                interestRates.style.display = 'none';
+            }
+        });
+
+        // Adicionar Dívida
+        function addDebt() {
+            var clientName = document.getElementById('clientName').value;
+            var debtType = document.getElementById('debtType').value;
+            var debtValue = parseFloat(document.getElementById('debtValue').value);
+
+            if (clientName === '' || !validateInput(debtValue, 'Por favor, insira um valor válido para a dívida.')) return;
+
+            var interestRate = debtType === 'emprestimo' ? parseFloat(document.getElementById('interestRate').value) : 0;
+            var totalToPay = debtValue + (debtValue * interestRate / 100);
+            var newDebtKey = database.ref().child('debts').push().key;
+            database.ref('debts/' + newDebtKey).set({
+                clientName: clientName,
+                type: debtType,
+                value: debtValue,
+                interestRate: interestRate,
+                totalToPay: totalToPay,
+                date: new Date().toISOString()
+            });
+            document.getElementById('clientName').value = '';
+            document.getElementById('debtType').value = 'normal';
+            document.getElementById('debtValue').value = '';
+            document.getElementById('interestRates').style.display = 'none';
+            updateSummary();
+        }
+
+        // Adicionar Reembolso
+        function addReimbursement() {
+            var reimbursementClient = document.getElementById('reimbursementClient').value;
+            var reimbursementValue = parseFloat(document.getElementById('reimbursementValue').value);
+
+            if (reimbursementClient === '' || !validateInput(reimbursementValue, 'Por favor, insira um valor válido para o reembolso.')) return;
+
+            var newReimbursementKey = database.ref().child('reimbursements').push().key;
+            database.ref('reimbursements/' + newReimbursementKey).set({
+                client: reimbursementClient,
+                value: reimbursementValue,
+                date: new Date().toISOString()
+            });
+            document.getElementById('reimbursementClient').value = '';
+            document.getElementById('reimbursementValue').value = '';
+            updateSummary();
+        }
+
+        // Atualizar Resumo
+        function updateSummary() {
+            database.ref().once('value', function(snapshot) {
+                var incomes = snapshot.val().incomes || {};
+                var expenses = snapshot.val().expenses || {};
+                var debts = snapshot.val().debts || {};
+                var reimbursements = snapshot.val().reimbursements || {};
+
+                var totalIncome = 0;
+                for (var key in incomes) {
+                    totalIncome += incomes[key].value;
+                }
+
+                var totalExpenses = 0;
+                for (var key in expenses) {
+                    totalExpenses += expenses[key].value;
+                }
+
+                var totalNormalDebts = 0;
+                var totalLoanDebts = 0;
+                var totalInterest = 0;
+                var activeClients = {};
+                for (var key in debts) {
+                    var debt = debts[key];
+                    if (debt.type === 'normal') {
+                        totalNormalDebts += debt.value;
+                    } else {
+                        totalLoanDebts += debt.value;
+                        totalInterest += debt.value * debt.interestRate / 100;
+                    }
+                    activeClients[debt.clientName] = true;
+                }
+
+                var totalReimbursements = 0;
+                for (var key in reimbursements) {
+                    totalReimbursements += reimbursements[key].value;
+                }
+
+                var availableBalance = totalIncome - totalExpenses - totalNormalDebts - totalLoanDebts + totalReimbursements;
+
+                document.getElementById('totalIncome').innerText = totalIncome + ' Mt';
+                document.getElementById('totalNormalDebts').innerText = totalNormalDebts + ' Mt';
+                document.getElementById('totalLoanDebts').innerText = totalLoanDebts + ' Mt';
+                document.getElementById('totalInterest').innerText = totalInterest + ' Mt';
+                document.getElementById('totalClients').innerText = Object.keys(activeClients).length;
+                document.getElementById('availableBalance').innerText = availableBalance + ' Mt';
+
+                updateClientDebtList(debts);
+            });
+        }
+
+        // Atualizar Lista de Dívidas de Clientes
+        function updateClientDebtList(debts) {
+            var clientDebtList = document.getElementById('clientDebtList');
+            clientDebtList.innerHTML = '';
+            for (var key in debts) {
+                var debt = debts[key];
+                var listItem = document.createElement('li');
+                listItem.className = 'list-group-item';
+                listItem.innerHTML = `
+                    <strong>Cliente:</strong> ${debt.clientName}<br>
+                    <strong>Valor Devido:</strong> ${debt.value} Mt<br>
+                    <strong>Juros:</strong> ${debt.interestRate}%<br>
+                    <strong>Total a Pagar:</strong> ${debt.totalToPay} Mt<br>
+                    <strong>Data:</strong> ${new Date(debt.date).toLocaleString()}<br>
+                    <button class="btn-delete" onclick="confirmDelete('${key}')">Excluir</button>
+                    <div class="confirm-box">
+                        <button class="btn-confirm" onclick="deleteDebt('${key}')">Sim</button>
+                        <button class="btn-delete" onclick="cancelDelete('${key}')">Não</button>
+                    </div>
+                `;
+                clientDebtList.appendChild(listItem);
+            }
+            updateReimbursementClients();
+        }
+
+        // Atualizar Lista de Clientes para Reembolsos
+        function updateReimbursementClients() {
+            var reimbursementClientSelect = document.getElementById('reimbursementClient');
+            reimbursementClientSelect.innerHTML = '';
+            database.ref('debts').once('value', function(snapshot) {
+                var debts = snapshot.val() || {};
+                var clientNames = [];
+                for (var key in debts) {
+                    var debt = debts[key];
+                    if (!clientNames.includes(debt.clientName)) {
+                        clientNames.push(debt.clientName);
+                    }
+                }
+                clientNames.forEach(function(clientName) {
+                    var option = document.createElement('option');
+                    option.value = clientName;
+                    option.innerText = clientName;
+                    reimbursementClientSelect.appendChild(option);
+                });
+            });
+        }
+
+        // Confirmar Exclusão
+        function confirmDelete(key) {
+            var listItem = document.querySelector(`button[onclick="confirmDelete('${key}')"]`).parentElement;
+            listItem.classList.add('confirming');
+        }
+
+        // Cancelar Exclusão
+        function cancelDelete(key) {
+            var listItem = document.querySelector(`button[onclick="confirmDelete('${key}')"]`).parentElement;
+            listItem.classList.remove('confirming');
+        }
+
+        // Excluir Dívida
+        function deleteDebt(key) {
+            database.ref('debts/' + key).remove().then(updateSummary);
+        }
+
+        // Limpar Dados Específicos
+        function confirmClear(type) {
+            var confirmation = confirm('Você tem certeza que deseja excluir todos os itens desta seção?');
+            if (confirmation) {
+                database.ref(type).set(null).then(updateSummary);
+            }
+        }
+
+        // Limpar Todo o Histórico
+        function promptPassword() {
+            var password = prompt('Digite a senha para limpar todo o histórico:');
+            if (password === '123') {
+                clearAllData();
+            } else {
+                alert('Senha incorreta.');
+            }
+        }
+
+        function clearAllData() {
+            database.ref().set(null).then(updateSummary);
+        }
+
+        // Atualizar resumo inicial ao carregar a página
+        updateSummary();
     </script>
 </body>
 </html>
