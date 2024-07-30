@@ -3,562 +3,632 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestão Financeira</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Gestão Financeira de Poupança</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f5;
-            margin: 0;
-            padding: 0;
-        }
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
 
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+.container {
+    width: 80%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-        h1, h2 {
-            text-align: center;
-            color: #333;
-        }
+h1, h2 {
+    text-align: center;
+    color: #444;
+}
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
-        }
+input[type="text"],
+input[type="number"],
+select {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
 
-        input, select, button {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
+button {
+    padding: 10px 20px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
 
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+button i {
+    margin-right: 5px;
+}
 
-        button:hover {
-            background-color: #0056b3;
-        }
+button:hover {
+    background-color: #0056b3;
+}
 
-        .card {
-            background-color: #fff;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
+.summary-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin: 10px 0;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
 
-        .card.receitas {
-            border-left: 5px solid #28a745; /* Verde */
-        }
+.card {
+    background-color: #f8f9fa;
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
 
-        .card.despesas {
-            border-left: 5px solid #dc3545; /* Vermelho */
-        }
+.card strong {
+    font-size: 1.2em;
+    display: block;
+    margin-bottom: 10px;
+}
 
-        .card.dividas {
-            border-left: 5px solid #ffc107; /* Amarelo */
-        }
+.delete-btn {
+    background-color: #d33;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
 
-        .card.reembolsos {
-            border-left: 5px solid #007bff; /* Azul */
-        }
+.delete-btn i {
+    margin-right: 5px;
+}
 
-        .card.saldo {
-            border-left: 5px solid #6c757d; /* Cinza */
-        }
+.delete-btn:hover {
+    background-color: #a00;
+}
 
-        .saldo-valor {
-            font-size: 22px;
-            font-weight: bold;
-        }
+.limpar-tudo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+}
 
-        .saldo-valor.red {
-            color: red;
-        }
+.limpar-tudo i {
+    margin-right: 5px;
+}
 
-        .saldo-valor.green {
-            color: green;
-        }
+.limpar-tudo:hover {
+    background-color: #0056b3;
+}
 
-        .saldo-valor.yellow {
-            color: #ffc107;
-        }
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 15px;
+    }
 
-        .saldo-valor.blue {
-            color: #007bff;
-        }
+    input[type="text"],
+    input[type="number"],
+    select {
+        width: calc(100% - 20px);
+    }
 
-        .saldo-valor.grey {
-            color: #6c757d;
-        }
+    button,
+    .limpar-tudo {
+        width: 100%;
+        justify-content: center;
+    }
 
-        .item-list {
-            list-style-type: none;
-            padding: 0;
-        }
+    .summary-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 
-        .item {
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-            position: relative;
-        }
+    .delete-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
 
-        .item:last-child {
-            border-bottom: none;
-        }
+@media (max-width: 480px) {
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
 
-        .item-title {
-            font-weight: bold;
-        }
+    input[type="text"],
+    input[type="number"],
+    select {
+        width: calc(100% - 18px);
+    }
 
-        .item-date {
-            font-size: 0.9em;
-            color: #555;
-        }
+    button,
+    .limpar-tudo {
+        width: 100%;
+        justify-content: center;
+        padding: 12px;
+        font-size: 1em;
+    }
 
-        .hidden {
-            display: none;
-        }
+    .summary-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 
-        .delete-button {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: red;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            padding: 5px 10px;
-            display: none;
-        }
+    .delete-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
     </style>
 </head>
 <body>
+
+    <h1>Gestão Financeira de Poupança</h1>
+
     <div class="container">
-        <h1 class="text-center">Sistema de Gestão Financeira</h1>
-
-        <div class="card">
-            <div class="card-body">
-                <h2>Receitas</h2>
-                <div class="form-group">
-                    <select class="form-control" id="incomeType">
-                        <option value="salario">Salário</option>
-                        <option value="rendaExtra">Renda Extra</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <input type="number" class="form-control" id="incomeValue" placeholder="Valor (em Mt)">
-                </div>
-                <button class="btn btn-primary btn-block" onclick="addIncome()">Adicionar</button>
-            </div>
-        </div>
-
-        
-
-        <div class="card">
-            <div class="card-body">
-                <h2>Dívidas</h2>
-                <div class="form-group">
-                    <input type="text" class="form-control" id="clientName" placeholder="Nome do Cliente">
-                </div>
-                <div class="form-group">
-                    <select class="form-control" id="debtType">
-                        <option value="normal">Dívida Normal</option>
-                        <option value="emprestimo">Dívida com Empréstimo</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <input type="number" class="form-control" id="debtValue" placeholder="Valor (em Mt)">
-                </div>
-                <div id="interestRates" class="form-group" style="display:none;">
-                    <label for="interestRate">Taxa de Juros:</label>
-                    <select class="form-control" id="interestRate">
-                        <option value="20">20%</option>
-                        <option value="25">25%</option>
-                        <option value="30">30%</option>
-                        <option value="35">35%</option>
-                        <option value="40">40%</option>
-                    </select>
-                </div>
-                <button class="btn btn-primary btn-block" onclick="addDebt()">Adicionar</button>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-body">
-                <h2>Reembolsos</h2>
-                <div class="form-group">
-                    <select class="form-control" id="reimbursementClient"></select>
-                </div>
-                <div class="form-group">
-                    <input type="number" class="form-control" id="reimbursementValue" placeholder="Valor Reembolsado (em Mt)">
-                </div>
-                <button class="btn btn-primary btn-block" onclick="addReimbursement()">Adicionar</button>
-            </div>
-        </div>
-
-      <div class="card">
-    <div class="card-body">
-        <h2>Resumo</h2>
-        <p>Total de Juros: <span id="totalInterest">0 Mt</span></p>
-        <p>Total de Clientes Ativos: <span id="totalClients">0</span></p>
-        <p>Total de Receitas: <span id="totalIncome">0 Mt</span></p>
-        <p>Total de Dívidas Normais: <span id="totalNormalDebts">0 Mt</span></p>
-        <p>Total de Dívidas com Empréstimo: <span id="totalLoanDebts">0 Mt</span></p>
-        <p>Saldo Disponível: <span id="availableBalance">0 Mt</span></p>
-        <p>Saldo Contabilístico: <span id="accountingBalance">0 Mt</span></p>
+        <h2>Criação de Conta</h2>
+        <input type="text" id="nome" placeholder="Nome do Membro">
+        <button onclick="criarConta()"><i class="fas fa-user-plus"></i>Criar Conta</button>
     </div>
-</div>
 
+    <div class="container">
+        <h2>Registro de Poupança</h2>
+        <select id="nomePoupanca"></select>
+        <input type="number" id="valorPoupado" placeholder="Valor Poupado">
+        <button onclick="registrarPoupanca()"><i class="fas fa-save"></i>Registrar Poupança</button>
+    </div>
 
-        <div class="card">
-            <div class="card-body">
-                <h2>Clientes e Dívidas</h2>
-                <ul id="clientDebtList" class="list-group"></ul>
-            </div>
+    <div class="container">
+        <h2>Registro de Dívidas</h2>
+        <input type="text" id="nomeDivida" placeholder="Nome do Cliente">
+        <input type="number" id="valorDivida" placeholder="Valor da Dívida">
+        <input type="number" id="valorJuros" placeholder="Juros (%)">
+        <button onclick="registrarDivida()"><i class="fas fa-file-invoice-dollar"></i>Registrar Dívida</button>
+    </div>
+
+    <div class="container">
+        <h2>Registro de Reembolso</h2>
+        <select id="nomeReembolso"></select>
+        <input type="number" id="valorReembolso" placeholder="Valor Reembolsado">
+        <button onclick="registrarReembolso()"><i class="fas fa-money-check-alt"></i>Registrar Reembolso</button>
+    </div>
+
+    <div class="container">
+        <h2>Resumo Financeiro</h2>
+        <div class="summary-card">
+            <span>Total de Juros</span>
+            <span id="totalJuros">0</span>
+        </div>
+        <div class="summary-card">
+            <span>Total de Dívidas</span>
+            <span id="totalDividas">0</span>
+        </div>
+        <div class="summary-card">
+            <span>Total de Membros</span>
+            <span id="totalMembros">0</span>
+        </div>
+        <div class="summary-card">
+            <span>Total de Clientes</span>
+            <span id="totalClientes">0</span>
+        </div>
+        <div class="summary-card">
+            <span>Total Poupado</span>
+            <span id="totalPoupado">0</span>
+        </div>
+        <div class="summary-card">
+            <span>Total Reembolsado</span>
+            <span id="totalReembolsado">0</span>
         </div>
     </div>
 
+    <div class="container">
+        <h2>Poupanças Registradas</h2>
+        <div id="poupancasList"></div>
+        <button class="limpar-tudo" onclick="confirmarLimparTudo('poupancas')"><i class="fas fa-trash-alt"></i>Limpar Tudo</button>
+    </div>
+
+    <div class="container">
+        <h2>Reembolsos Registrados</h2>
+        <div id="reembolsosList"></div>
+        <button class="limpar-tudo" onclick="confirmarLimparTudo('reembolsos')"><i class="fas fa-trash-alt"></i>Limpar Tudo</button>
+    </div>
+
+    <div class="container">
+        <h2>Dívidas Registradas</h2>
+        <div id="dividasList"></div>
+        <button class="limpar-tudo" onclick="confirmarLimparTudo('dividas')"><i class="fas fa-trash-alt"></i>Limpar Tudo</button>
+    </div>
+
+    <div class="container">
+        <button class="limpar-tudo" style="background-color: #d33;" onclick="confirmarLimparTodoSistema()"><i class="fas fa-exclamation-triangle"></i>Limpar Todo o Sistema</button>
+    </div>
+
+    <!-- Firebase Configuration -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-<script>
-    // Configuração do Firebase
-    const firebaseConfig = {
-        apiKey: "AIzaSyD8XOHaLCzNLDrIlHG3em4g4gyYIKTLWpQ",
-        authDomain: "xitique-61310.firebaseapp.com",
-        databaseURL: "https://xitique-61310-default-rtdb.firebaseio.com",
-        projectId: "xitique-61310",
-        storageBucket: "xitique-61310.appspot.com",
-        messagingSenderId: "331274991404",
-        appId: "1:331274991404:web:2fec0eb082d3fe0b33de89",
-        measurementId: "G-DFDMBKW1RK"
-    };
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyD8XOHaLCzNLDrIlHG3em4g4gyYIKTLWpQ",
+            authDomain: "xitique-61310.firebaseapp.com",
+            databaseURL: "https://xitique-61310-default-rtdb.firebaseio.com",
+            projectId: "xitique-61310",
+            storageBucket: "xitique-61310.appspot.com",
+            messagingSenderId: "331274991404",
+            appId: "1:331274991404:web:2fec0eb082d3fe0b33de89",
+            measurementId: "G-DFDMBKW1RK"
+        };
 
-    // Inicializar Firebase
-    firebase.initializeApp(firebaseConfig);
-    var database = firebase.database();
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
 
-    // Validar Entrada
-    function validateInput(value, errorMsg) {
-        if (isNaN(value) || value <= 0) {
-            alert(errorMsg);
-            return false;
+        function getCurrentDateTime() {
+            const now = new Date();
+            return now.toLocaleString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
         }
-        return true;
-    }
 
-    // Função para obter data e hora atual no formato ISO
-    function getCurrentDateTime() {
-        return new Date().toISOString();
-    }
-
-    // Função para calcular a diferença de dias entre duas datas
-    function getDifferenceInDays(date1, date2) {
-        const diffInMs = Math.abs(new Date(date2) - new Date(date1));
-        return diffInMs / (1000 * 60 * 60 * 24);
-    }
-
-    // Adicionar Receita
-    function addIncome() {
-        var incomeType = document.getElementById('incomeType').value;
-        var incomeValue = parseFloat(document.getElementById('incomeValue').value);
-
-        if (!validateInput(incomeValue, 'Por favor, insira um valor válido para a receita.')) return;
-
-        var newIncomeKey = database.ref().child('incomes').push().key;
-        database.ref('incomes/' + newIncomeKey).set({
-            type: incomeType,
-            value: incomeValue,
-            dateTime: getCurrentDateTime()
-        });
-
-        document.getElementById('incomeValue').value = '';
-        updateSummary();
-    }
-
-    // Adicionar Despesa
-    function addExpense() {
-        var expenseName = document.getElementById('expenseName').value;
-        var expenseValue = parseFloat(document.getElementById('expenseValue').value);
-
-        if (expenseName.trim() === '' || !validateInput(expenseValue, 'Por favor, insira um valor válido para a despesa.')) return;
-
-        var newExpenseKey = database.ref().child('expenses').push().key;
-        database.ref('expenses/' + newExpenseKey).set({
-            name: expenseName,
-            value: expenseValue,
-            dateTime: getCurrentDateTime()
-        });
-
-        document.getElementById('expenseName').value = '';
-        document.getElementById('expenseValue').value = '';
-        updateSummary();
-    }
-
-    // Adicionar Dívida
-    function addDebt() {
-        var clientName = document.getElementById('clientName').value;
-        var debtType = document.getElementById('debtType').value;
-        var debtValue = parseFloat(document.getElementById('debtValue').value);
-        var interestRate = parseFloat(document.getElementById('interestRate').value);
-
-        if (clientName.trim() === '' || !validateInput(debtValue, 'Por favor, insira um valor válido para a dívida.')) return;
-
-        var interest = debtType === 'emprestimo' ? interestRate : 0;
-        var totalDebtValue = debtType === 'emprestimo' ? debtValue + (debtValue * (interest / 100)) : debtValue;
-
-        var newDebtKey = database.ref().child('debts').push().key;
-        database.ref('debts/' + newDebtKey).set({
-            client: clientName,
-            type: debtType,
-            value: debtValue,
-            interest: interest,
-            remaining: totalDebtValue,
-            reimbursed: 0,
-            dateTime: getCurrentDateTime()
-        });
-
-        // Adiciona cliente se não existir
-        var clientRef = database.ref('clients/' + clientName);
-        clientRef.once('value', function(snapshot) {
-            if (!snapshot.exists()) {
-                clientRef.set(true);
+        function criarConta() {
+            const nome = document.getElementById('nome').value;
+            if (nome === "") {
+                Swal.fire('Erro', 'Por favor, preencha o nome do membro.', 'error');
+                return;
             }
-        });
 
-        document.getElementById('clientName').value = '';
-        document.getElementById('debtValue').value = '';
-        document.getElementById('interestRates').style.display = 'none';
-        updateSummary();
-        updateClientDebtList();
-    }
+            db.collection('membros').add({
+                nome: nome,
+                createdAt: getCurrentDateTime()
+            }).then(() => {
+                Swal.fire('Sucesso', 'Conta criada com sucesso!', 'success');
+                atualizarSelectMembros();
+                document.getElementById('nome').value = '';
+                atualizarResumoFinanceiro();
+            }).catch((error) => {
+                Swal.fire('Erro', `Erro ao criar conta: ${error}`, 'error');
+            });
+        }
 
-    // Exibir taxas de juros apenas para dívidas com empréstimo
-    document.getElementById('debtType').addEventListener('change', function() {
-        var debtType = this.value;
-        document.getElementById('interestRates').style.display = debtType === 'emprestimo' ? 'block' : 'none';
-    });
+        function registrarPoupanca() {
+            const nomePoupanca = document.getElementById('nomePoupanca').value;
+            const valorPoupado = document.getElementById('valorPoupado').value;
 
-    // Adicionar Reembolso
-    function addReimbursement() {
-        var client = document.getElementById('reimbursementClient').value;
-        var reimbursementValue = parseFloat(document.getElementById('reimbursementValue').value);
+            if (nomePoupanca === "" || valorPoupado === "") {
+                Swal.fire('Erro', 'Por favor, preencha todos os campos.', 'error');
+                return;
+            }
 
-        if (!validateInput(reimbursementValue, 'Por favor, insira um valor válido para o reembolso.')) return;
+            db.collection('poupancas').add({
+                nome: nomePoupanca,
+                valor: Number(valorPoupado),
+                createdAt: getCurrentDateTime()
+            }).then(() => {
+                Swal.fire('Sucesso', 'Poupança registrada com sucesso!', 'success');
+                document.getElementById('valorPoupado').value = '';
+                atualizarResumoFinanceiro();
+                exibirPoupancas();
+            }).catch((error) => {
+                Swal.fire('Erro', `Erro ao registrar poupança: ${error}`, 'error');
+            });
+        }
 
-        database.ref('debts').once('value', function(snapshot) {
-            snapshot.forEach(function(debtSnapshot) {
-                var debt = debtSnapshot.val();
-                if (debt.client === client) {
-                    var newReimbursed = (debt.reimbursed || 0) + reimbursementValue;
-                    var newRemaining = debt.remaining - reimbursementValue;
+        function registrarDivida() {
+            const nomeDivida = document.getElementById('nomeDivida').value;
+            const valorDivida = document.getElementById('valorDivida').value;
+            const valorJuros = document.getElementById('valorJuros').value;
 
-                    // Recalcular o remanescente com os juros
-                    var remainingAfterReimbursement = newRemaining > 0 ? newRemaining + (newRemaining * (debt.interest / 100)) : 0;
-                    database.ref('debts/' + debtSnapshot.key).update({
-                        reimbursed: newReimbursed,
-                        remaining: remainingAfterReimbursement,
-                        dateTime: getCurrentDateTime()
+            if (nomeDivida === "" || valorDivida === "" || valorJuros === "") {
+                Swal.fire('Erro', 'Por favor, preencha todos os campos.', 'error');
+                return;
+            }
+
+            db.collection('dividas').add({
+                nome: nomeDivida,
+                valor: Number(valorDivida),
+                juros: Number(valorJuros),
+                createdAt: getCurrentDateTime()
+            }).then(() => {
+                Swal.fire('Sucesso', 'Dívida registrada com sucesso!', 'success');
+                document.getElementById('nomeDivida').value = '';
+                document.getElementById('valorDivida').value = '';
+                document.getElementById('valorJuros').value = '';
+                atualizarResumoFinanceiro();
+                exibirDividas();
+                atualizarSelectDividas();
+            }).catch((error) => {
+                Swal.fire('Erro', `Erro ao registrar dívida: ${error}`, 'error');
+            });
+        }
+
+        function registrarReembolso() {
+            const nomeReembolso = document.getElementById('nomeReembolso').value;
+            const valorReembolso = document.getElementById('valorReembolso').value;
+
+            if (nomeReembolso === "" || valorReembolso === "") {
+                Swal.fire('Erro', 'Por favor, preencha todos os campos.', 'error');
+                return;
+            }
+
+            db.collection('reembolsos').add({
+                divida: nomeReembolso,
+                valor: Number(valorReembolso),
+                createdAt: getCurrentDateTime()
+            }).then(() => {
+                Swal.fire('Sucesso', 'Reembolso registrado com sucesso!', 'success');
+                document.getElementById('valorReembolso').value = '';
+                atualizarResumoFinanceiro();
+                exibirReembolsos();
+            }).catch((error) => {
+                Swal.fire('Erro', `Erro ao registrar reembolso: ${error}`, 'error');
+            });
+        }
+
+        function atualizarResumoFinanceiro() {
+            db.collection('dividas').get().then((querySnapshot) => {
+                let totalDividas = 0;
+                let totalClientes = 0;
+                let totalJuros = 0;
+
+                querySnapshot.forEach((doc) => {
+                    totalDividas += doc.data().valor;
+                    totalJuros += (doc.data().valor * (doc.data().juros / 100));
+                    totalClientes++;
+                });
+
+                document.getElementById('totalDividas').innerText = totalDividas;
+                document.getElementById('totalClientes').innerText = totalClientes;
+                document.getElementById('totalJuros').innerText = totalJuros;
+            });
+
+            db.collection('poupancas').get().then((querySnapshot) => {
+                let totalPoupado = 0;
+
+                querySnapshot.forEach((doc) => {
+                    totalPoupado += doc.data().valor;
+                });
+
+                document.getElementById('totalPoupado').innerText = totalPoupado;
+            });
+
+            db.collection('reembolsos').get().then((querySnapshot) => {
+                let totalReembolsado = 0;
+
+                querySnapshot.forEach((doc) => {
+                    totalReembolsado += doc.data().valor;
+                });
+
+                document.getElementById('totalReembolsado').innerText = totalReembolsado;
+            });
+
+            db.collection('membros').get().then((querySnapshot) => {
+                let totalMembros = 0;
+                querySnapshot.forEach(() => {
+                    totalMembros++;
+                });
+                document.getElementById('totalMembros').innerText = totalMembros;
+            });
+        }
+
+        function exibirPoupancas() {
+            db.collection('poupancas').orderBy('createdAt').get().then((querySnapshot) => {
+                const poupancasList = document.getElementById('poupancasList');
+                poupancasList.innerHTML = '';
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const poupancaCard = document.createElement('div');
+                    poupancaCard.className = 'card';
+                    poupancaCard.innerHTML = `
+                        <strong>${data.nome}</strong>
+                        <p>Valor: ${data.valor} Meticais</p>
+                        <p>Data: ${data.createdAt}</p>
+                        <button class="delete-btn" onclick="deletarDocumento('poupancas', '${doc.id}')"><i class="fas fa-trash"></i>Excluir</button>
+                    `;
+                    poupancasList.appendChild(poupancaCard);
+                });
+            });
+        }
+
+        function exibirDividas() {
+            db.collection('dividas').orderBy('createdAt').get().then((querySnapshot) => {
+                const dividasList = document.getElementById('dividasList');
+                dividasList.innerHTML = '';
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const dividaCard = document.createElement('div');
+                    dividaCard.className = 'card';
+                    dividaCard.innerHTML = `
+                        <strong>${data.nome}</strong>
+                        <p>Valor: ${data.valor} Meticais</p>
+                        <p>Juros: ${data.juros}%</p>
+                        <p>Total a Pagar: ${data.valor + (data.valor * (data.juros / 100))} Meticais</p>
+                        <p>Data: ${data.createdAt}</p>
+                        <button class="delete-btn" onclick="deletarDocumento('dividas', '${doc.id}')"><i class="fas fa-trash"></i>Excluir</button>
+                    `;
+                    dividasList.appendChild(dividaCard);
+                });
+            });
+        }
+
+        function exibirReembolsos() {
+            db.collection('reembolsos').orderBy('createdAt').get().then((querySnapshot) => {
+                const reembolsosList = document.getElementById('reembolsosList');
+                reembolsosList.innerHTML = '';
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const reembolsoCard = document.createElement('div');
+                    reembolsoCard.className = 'card';
+                    reembolsoCard.innerHTML = `
+                        <strong>${data.divida}</strong>
+                        <p>Valor Reembolsado: ${data.valor} Meticais</p>
+                        <p>Data: ${data.createdAt}</p>
+                        <button class="delete-btn" onclick="deletarDocumento('reembolsos', '${doc.id}')"><i class="fas fa-trash"></i>Excluir</button>
+                    `;
+                    reembolsosList.appendChild(reembolsoCard);
+                });
+            });
+        }
+
+        function deletarDocumento(colecao, id) {
+            Swal.fire({
+                title: 'Tem certeza?',
+                text: "Você não poderá reverter isso!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim, excluir!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    db.collection(colecao).doc(id).delete().then(() => {
+                        Swal.fire('Excluído!', 'O documento foi excluído.', 'success');
+                        if (colecao === 'poupancas') exibirPoupancas();
+                        if (colecao === 'dividas') exibirDividas();
+                        if (colecao === 'reembolsos') exibirReembolsos();
+                        atualizarResumoFinanceiro();
+                    }).catch((error) => {
+                        Swal.fire('Erro', `Erro ao excluir documento: ${error}`, 'error');
                     });
                 }
             });
-            updateClientDebtList();
-        });
+        }
 
-        document.getElementById('reimbursementValue').value = '';
-        updateSummary();
-    }
-
-    // Função para aplicar juros após 30 dias
-    function applyInterestAfter30Days() {
-        database.ref('debts').once('value', function(snapshot) {
-            snapshot.forEach(function(debtSnapshot) {
-                var debt = debtSnapshot.val();
-                var daysSinceCreation = getDifferenceInDays(debt.dateTime, new Date());
-                if (daysSinceCreation >= 30 && debt.remaining > 0) {
-                    var newRemaining = debt.remaining + (debt.remaining * (debt.interest / 100));
-                    database.ref('debts/' + debtSnapshot.key).update({
-                        remaining: newRemaining,
-                        dateTime: getCurrentDateTime()
-                    });
+        function confirmarLimparTudo(colecao) {
+            Swal.fire({
+                title: 'Tem certeza?',
+                text: "Você não poderá reverter isso!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim, limpar tudo!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    limparTudo(colecao);
                 }
             });
-            updateSummary();
-            updateClientDebtList();
-        });
-    }
-
-    // Atualizar Resumo
-// Atualizar Resumo
-function updateSummary() {
-    // Consultar o banco de dados Firebase uma vez para obter todos os dados necessários
-    database.ref().once('value', function(snapshot) {
-        // Variáveis para armazenar os totais calculados
-        let totalInterest = 0;
-        let totalClients = 0;
-        let totalIncome = 0;
-        let totalNormalDebts = 0;
-        let totalLoanDebts = 0;
-        let totalReimbursed = 0;
-
-        // Calculando o total de juros de todas as dívidas por empréstimo e somando outras informações
-        snapshot.child('debts').forEach(function(debtSnapshot) {
-            const debt = debtSnapshot.val();
-            totalReimbursed += debt.reimbursed || 0;
-            if (debt.type === 'normal') {
-                totalNormalDebts += debt.value; // Somar dívidas normais
-            } else if (debt.type === 'emprestimo') {
-                totalLoanDebts += debt.value; // Somar dívidas por empréstimo
-                totalInterest += debt.value * (debt.interest / 100); // Calcular juros de dívidas por empréstimo
-            }
-        });
-
-        // Calculando o total de receita
-        snapshot.child('incomes').forEach(function(incomeSnapshot) {
-            totalIncome += incomeSnapshot.val().value;
-        });
-
-        // Contando o total de clientes
-        snapshot.child('clients').forEach(function(clientSnapshot) {
-            totalClients += 1;
-        });
-
-        // Calculando o saldo disponível
-        const availableBalance = totalIncome - totalNormalDebts - totalLoanDebts + totalReimbursed;
-
-        // Calculando o saldo contabilístico
-        const accountingBalance = availableBalance + totalInterest +  totalLoanDebts;
-
-        // Atualizando elementos HTML com os valores calculados e cores correspondentes
-        updateElementWithColor('totalInterest', `${totalInterest.toFixed(2)} Mt`, '#3498db'); // Azul para total de juros
-        updateElementWithColor('totalClients', totalClients.toString(), '#27ae60'); // Verde para total de clientes
-        updateElementWithColor('totalIncome', `${totalIncome.toFixed(2)} Mt`, '#f39c12'); // Laranja para total de receita
-        updateElementWithColor('totalNormalDebts', `${totalNormalDebts.toFixed(2)} Mt`, '#e74c3c'); // Vermelho para total de dívidas normais
-        updateElementWithColor('totalLoanDebts', `${totalLoanDebts.toFixed(2)} Mt`, '#9b59b6'); // Roxo para total de dívidas por empréstimo
-        updateElementWithColor('availableBalance', `${availableBalance.toFixed(2)} Mt`, '#2ecc71'); // Verde claro para saldo disponível
-        updateElementWithColor('accountingBalance', `${accountingBalance.toFixed(2)} Mt`, '#27ae60'); // Verde escuro para saldo contabilístico
-    });
-}
-
-// Função auxiliar para atualizar um elemento HTML com cor
-function updateElementWithColor(elementId, text, color) {
-    const element = document.getElementById(elementId);
-    if (element) {
-        element.textContent = text;
-        element.style.color = color;
-    } else {
-        console.error(`Elemento com ID '${elementId}' não encontrado.`);
-    }
-}
-
-    // Atualizar Lista de Dívidas de Clientes
-    function updateClientDebtList() {
-        var clientDebtList = document.getElementById('clientDebtList');
-        clientDebtList.innerHTML = '';
-
-        database.ref('debts').once('value', function(snapshot) {
-            snapshot.forEach(function(debtSnapshot) {
-                var debt = debtSnapshot.val();
-                var listItem = document.createElement('li');
-                listItem.className = 'list-group-item';
-                listItem.setAttribute('data-key', debtSnapshot.key);
-                var totalDebtWithInterest = debt.type === 'emprestimo' ? debt.value + (debt.value * (debt.interest / 100)) : debt.value;
-                var statusText = debt.remaining <= 0 
-                    ? '<span class="badge badge-success">Pago</span>' 
-                    : `<span class="badge badge-warning">Pagou ${debt.reimbursed} Mt, Remanescente: ${debt.remaining} Mt (Incluindo Juros)</span>`;
-                listItem.innerHTML = `
-                    <div>
-                        <strong>Cliente:</strong> ${debt.client} <br>
-                        <strong>Tipo:</strong> ${debt.type === 'normal' ? 'Dívida Normal' : 'Dívida com Empréstimo'} <br>
-                        <strong>Valor:</strong> ${debt.value} Mt <br>
-                        ${debt.type === 'emprestimo' ? `<strong>Juros:</strong> ${debt.interest}%` : ''}
-                        <br>
-                        <strong>Valor Total com Juros:</strong> ${totalDebtWithInterest} Mt <br>
-                        <strong>Status:</strong> ${statusText} <br>
-                        <strong>Data e Hora:</strong> ${debt.dateTime} <br>
-                        <button class="btn btn-danger btn-sm mt-2" onclick="confirmDeleteDebt('${debtSnapshot.key}')">Excluir</button>
-                    </div>
-                `;
-                clientDebtList.appendChild(listItem);
-            });
-        });
-
-        // Atualizar lista de clientes no campo de reembolso
-        var reimbursementClient = document.getElementById('reimbursementClient');
-        reimbursementClient.innerHTML = '';
-
-        database.ref('clients').once('value', function(snapshot) {
-            snapshot.forEach(function(clientSnapshot) {
-                var option = document.createElement('option');
-                option.value = clientSnapshot.key;
-                option.textContent = clientSnapshot.key;
-                reimbursementClient.appendChild(option);
-            });
-        });
-    }
-
-    // Confirmar Exclusão de Dívida
-    function confirmDeleteDebt(debtKey) {
-        var confirmation = confirm('Tem certeza de que deseja excluir esta dívida?');
-        if (confirmation) {
-            deleteDebt(debtKey);
         }
-    }
 
-    // Excluir Dívida
-    function deleteDebt(debtKey) {
-        database.ref('debts/' + debtKey).remove();
-        updateSummary();
-        updateClientDebtList();
-    }
-
-    // Limpar Todos os Dados
-    function clearAllData() {
-    var password = prompt('Digite a senha para limpar todos os dados:');
-    if (password === 'suaSenhaSecreta') {
-        database.ref().remove()
-            .then(function() {
-                updateSummary();
-                updateClientDebtList();
-                alert('Todos os dados foram limpos com sucesso.');
-            })
-            .catch(function(error) {
-                alert('Erro ao limpar os dados: ' + error.message);
+        function limparTudo(colecao) {
+            db.collection(colecao).get().then((querySnapshot) => {
+                const batch = db.batch();
+                querySnapshot.forEach((doc) => {
+                    batch.delete(doc.ref);
+                });
+                return batch.commit();
+            }).then(() => {
+                Swal.fire('Limpo!', 'Todos os documentos foram excluídos.', 'success');
+                if (colecao === 'poupancas') exibirPoupancas();
+                if (colecao === 'dividas') exibirDividas();
+                if (colecao === 'reembolsos') exibirReembolsos();
+                atualizarResumoFinanceiro();
+            }).catch((error) => {
+                Swal.fire('Erro', `Erro ao limpar documentos: ${error}`, 'error');
             });
-    } else {
-        alert('Senha incorreta!');
-    }
-}
+        }
 
+        function confirmarLimparTodoSistema() {
+            Swal.fire({
+                title: 'Tem certeza?',
+                text: "Você não poderá reverter isso!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim, limpar tudo!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    limparTodoSistema();
+                }
+            });
+        }
 
-// Inicializar
-document.addEventListener('DOMContentLoaded', () => {
-    updateSummary();
-    updateClientDebtList();
-});
+        function limparTodoSistema() {
+            const colecoes = ['poupancas', 'dividas', 'reembolsos', 'membros'];
+            colecoes.forEach((colecao) => {
+                db.collection(colecao).get().then((querySnapshot) => {
+                    const batch = db.batch();
+                    querySnapshot.forEach((doc) => {
+                        batch.delete(doc.ref);
+                    });
+                    return batch.commit();
+                }).then(() => {
+                    if (colecao === 'poupancas') exibirPoupancas();
+                    if (colecao === 'dividas') exibirDividas();
+                    if (colecao === 'reembolsos') exibirReembolsos();
+                    atualizarResumoFinanceiro();
+                }).catch((error) => {
+                    Swal.fire('Erro', `Erro ao limpar documentos: ${error}`, 'error');
+                });
+            });
+        }
 
-// Verificar juros a cada 24 horas
-setInterval(applyInterestAfter30Days, 24 * 60 * 60 * 1000); // Verificar a cada 24 horas
+        function atualizarSelectMembros() {
+            const select = document.getElementById('nomePoupanca');
+            select.innerHTML = '';
+            db.collection('membros').get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    const option = document.createElement('option');
+                    option.value = doc.data().nome;
+                    option.text = doc.data().nome;
+                    select.appendChild(option);
+                });
+            });
+        }
 
-</script>
+        function atualizarSelectDividas() {
+            const select = document.getElementById('nomeReembolso');
+            select.innerHTML = '';
+            db.collection('dividas').get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    const option = document.createElement('option');
+                    option.value = doc.data().nome;
+                    option.text = doc.data().nome;
+                    select.appendChild(option);
+                });
+            });
+        }
 
+        // Inicialização
+        window.onload = function() {
+            atualizarSelectMembros();
+            atualizarSelectDividas();
+            atualizarResumoFinanceiro();
+            exibirPoupancas();
+            exibirDividas();
+            exibirReembolsos();
+        }
+    </script>
 </body>
 </html>
